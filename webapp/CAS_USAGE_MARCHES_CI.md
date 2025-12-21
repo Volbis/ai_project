@@ -15,9 +15,10 @@ Les grands marchés d'Abidjan (Adjamé, Treichville, Cocody, Yopougon) font face
 ### Solution ZKA Marchés
 
 Système de **détection et d'analyse automatique des flux** pour :
+
 1. **Comptage en temps réel** : Nombre de personnes par zone
 2. **Détection d'encombrement** : Alertes quand seuil dépassé
-3. **Analyse circulation** : Voies bloquées, points de congestion
+3. **Analyze circulation** : Voies bloquées, points de congestion
 4. **Statistiques** : Heures de pointe, zones critiques
 5. **Prévention** : Prédiction des encombrements
 
@@ -27,17 +28,17 @@ Système de **détection et d'analyse automatique des flux** pour :
 
 ### Classes Principales (7)
 
-| Classe | Description | Importance |
-|--------|-------------|------------|
-| **personne** | Piéton, client, commerçant | ⭐⭐⭐ Critique |
-| **vehicule** | Moto, taxi, camion | ⭐⭐⭐ Critique |
-| **etal** | Stand de marché, boutique | ⭐⭐ Important |
-| **chariot** | Brouette, chariot à bras | ⭐⭐ Important |
-| **obstacle** | Marchandises empilées, colis | ⭐ Utile |
-| **voie_bloquee** | Passage obstrué | ⭐⭐⭐ Critique |
-| **zone_dense** | Concentration >10 pers/m² | ⭐⭐⭐ Critique |
+| Classe           | Description                  | Importance      |
+| ---------------- | ---------------------------- | --------------- |
+| **personne**     | Piéton, client, commerçant   | ⭐⭐⭐ Critique |
+| **vehicle**     | Moto, taxi, camion           | ⭐⭐⭐ Critique |
+| **etal**         | Stand de marché, boutique    | ⭐⭐ Important  |
+| **chariot**      | Brouette, chariot à bras     | ⭐⭐ Important  |
+| **obstacle**     | Marchandises empilées, colis | ⭐ Utile        |
+| **voie_bloquee** | Passage obstrué              | ⭐⭐⭐ Critique |
+| **zone_dense**   | Concentration >10 pers/m²    | ⭐⭐⭐ Critique |
 
-### Exemples de Détections
+### Examples de Détections
 
 ```
 ┌────────────────────────────────────┐
@@ -61,12 +62,14 @@ Système de **détection et d'analyse automatique des flux** pour :
 **Objectif** : Connaître le nombre de personnes en temps réel
 
 **Fonctionnement** :
+
 - Caméras aux entrées/sorties du marché
 - Détection et tracking des personnes
 - Compteur entrées/sorties
 - Dashboard temps réel
 
 **Bénéfices** :
+
 - Respect capacité maximale (sécurité)
 - Planification personnel de sécurité
 - Données pour agrandissement/rénovation
@@ -76,14 +79,16 @@ Système de **détection et d'analyse automatique des flux** pour :
 **Objectif** : Alerter quand zone devient dangereuse
 
 **Fonctionnement** :
+
 - Calcul densité (personnes/m²)
-- Seuils : 
+- Seuils :
   - 🟢 Normal : < 5 pers/m²
   - 🟡 Dense : 5-10 pers/m²
   - 🔴 Critique : > 10 pers/m²
 - Alerte automatique aux agents
 
 **Bénéfices** :
+
 - Prévention bousculades
 - Intervention rapide
 - Évacuation facilitée
@@ -93,13 +98,15 @@ Système de **détection et d'analyse automatique des flux** pour :
 **Objectif** : Réguler circulation motos/camions
 
 **Fonctionnement** :
+
 - Détection véhicules dans zones piétonnes
 - Comptage camions de livraison
 - Identification voies bloquées
 
 **Bénéfices** :
+
 - Réduction accidents
-- Optimisation livraisons (heures creuses)
+- Optimization livraisons (heures creuses)
 - Fluidité circulation
 
 ### 4. Cartographie des Zones Critiques
@@ -107,26 +114,30 @@ Système de **détection et d'analyse automatique des flux** pour :
 **Objectif** : Identifier points noirs
 
 **Fonctionnement** :
+
 - Heatmap d'encombrement
-- Analyse historique
+- Analyze historique
 - Identification patterns (jours, heures)
 
 **Bénéfices** :
+
 - Réaménagement éclairé
 - Ajout de voies d'accès
-- Optimisation emplacement étals
+- Optimization emplacement étals
 
 ### 5. Prévision d'Affluence
 
 **Objectif** : Anticiper les pics
 
 **Fonctionnement** :
-- Analyse données historiques
+
+- Analyze données historiques
 - Corrélation avec événements (fêtes, marchés spéciaux)
 - Prédiction 24-48h à l'avance
 
 **Bénéfices** :
-- Renforcement sécurité préventif
+
+- Reinforcement sécurité préventif
 - Information aux commerçants
 - Communication grand public
 
@@ -149,19 +160,21 @@ Système de **détection et d'analyse automatique des flux** pour :
 3. **Données** 📈
    - Base pour modernisation
    - Arguments pour investissements
-   - Optimisation ressources
+   - Optimization resources
 
 ### Réplicabilité
 
 **Autres marchés Abidjan** :
+
 - Marché de Cocody
 - Marché de Yopougon
 - Marché de Koumassi
 - Forum des marchés de Treichville
 
 **Extension possible** :
+
 - Gares routières (Adjamé, Yopougon)
-- Centres commerciaux (Playce Marcory)
+- Centers commerciaux (Playce Marcory)
 - Événements (FEMUA, MASA)
 - Stades (Félix Houphouët-Boigny)
 
@@ -199,27 +212,28 @@ Système de **détection et d'analyse automatique des flux** pour :
 ### Spécifications Matérielles
 
 **Caméras** :
+
 - Résolution : 1080p minimum
 - Angle : 90-110° (vue large)
-- Connexion : PoE (alimentation + réseau)
+- Connection : PoE (alimentation + réseau)
 - Protection : IP66 (extérieur)
 - Coût : ~100-200€/caméra
 
 **Serveur** :
+
 - **Option 1 - PC** : i5/Ryzen 5, 16GB RAM, SSD
   - Coût : ~500-700€
   - Performance : 5-10 caméras
-  
 - **Option 2 - GPU** : NVIDIA GTX 1650+
   - Coût : ~300€ (carte)
   - Performance : 20-30 caméras
-  
 - **Option 3 - Edge** : NVIDIA Jetson Nano/Xavier
   - Coût : ~100-400€
   - Performance : 2-8 caméras
   - Avantage : Faible consommation
 
 **Réseau** :
+
 - Bande passante : 2-5 Mbps/caméra
 - Switch PoE : 8-16 ports
 - Routeur/firewall pour sécurité
@@ -231,16 +245,19 @@ Système de **détection et d'analyse automatique des flux** pour :
 ### Étape 1 : Prise de Photos/Vidéos
 
 **Où** :
+
 - Marché d'Adjamé (heures de pointe)
 - Marché de Treichville
 - Différents angles et hauteurs
 
 **Quand** :
+
 - Matin (6h-10h) : Arrivée marchandises
 - Midi (12h-14h) : Pic clients
 - Soir (17h-19h) : Rush retour
 
 **Comment** :
+
 - Smartphone/caméra vidéo
 - Extraire images (1 image/2 secondes)
 - Objectif : 1000-5000 images
@@ -250,18 +267,20 @@ Système de **détection et d'analyse automatique des flux** pour :
 **Outil recommandé** : LabelImg ou Roboflow
 
 **Process** :
+
 1. Ouvrir image dans LabelImg
-2. Dessiner boîte autour de chaque objet
-3. Sélectionner classe (personne, vehicule, etc.)
+2. Dessiner boîte autour de chaque object
+3. Sélectionner classe (personne, vehicle, etc.)
 4. Sauvegarder (format YOLO)
 5. Répéter pour toutes les images
 
 **Répartition** :
+
 - Train : 70% (700 images)
 - Validation : 20% (200 images)
 - Test : 10% (100 images)
 
-### Étape 3 : Organisation
+### Étape 3 : Organization
 
 ```
 dataset_marches_ci/
@@ -284,11 +303,12 @@ dataset_marches_ci/
 ```
 
 **Format Label (YOLO)** :
+
 ```
 # adjame_001.txt
 0 0.5 0.3 0.1 0.2    # personne
 0 0.6 0.4 0.12 0.22  # personne
-1 0.2 0.7 0.15 0.25  # vehicule
+1 0.2 0.7 0.15 0.25  # vehicle
 ```
 
 ---
@@ -298,14 +318,15 @@ dataset_marches_ci/
 ### Configuration
 
 **Fichier : marches_ci.yaml**
+
 ```yaml
 path: dataset_marches_ci
 train: train/images
 val: val/images
 test: test/images
 
-nc: 7  # Nombre de classes
-names: ['personne', 'vehicule', 'etal', 'chariot', 'obstacle', 'voie_bloquee', 'zone_dense']
+nc: 7 # Nombre de classes
+names: ["personne", "vehicle", "etal", "chariot", "obstacle", "voie_bloquee", "zone_dense"]
 ```
 
 ### Commande d'Entraînement
@@ -366,6 +387,7 @@ python train.py \
 ### Validation sur le Terrain
 
 **Tests à effectuer** :
+
 1. Marché pendant heures creuses (facile)
 2. Marché pendant heures de pointe (difficile)
 3. Différentes conditions lumière (matin, soir)
@@ -417,17 +439,17 @@ python train.py \
 
 1. **Alertes Automatiques**
    - SMS aux agents de sécurité
-   - Notification sonore centre de contrôle
+   - Notification sonore center de contrôle
    - Escalade selon gravité
 
 2. **Historique**
    - Export PDF rapports journaliers
    - Graphiques tendances mensuelles
-   - Comparaison année N vs N-1
+   - Comparison année N vs N-1
 
 3. **Prédiction**
    - Affluence prévue prochaines 4h
-   - Recommandations staffing
+   - Recommendations staffing
    - Suggestions réaménagement
 
 ---
@@ -436,20 +458,21 @@ python train.py \
 
 ### Coût Initial (1 marché)
 
-| Poste | Détail | Coût |
-|-------|--------|------|
-| Caméras | 8 caméras IP PoE | 1,200€ |
-| Serveur | PC i5 + GPU | 1,000€ |
-| Réseau | Switch PoE, câbles | 300€ |
-| Installation | Main d'œuvre | 500€ |
-| Logiciel | Développement custom | 2,000€ |
-| **TOTAL** | | **5,000€** |
+| Poste        | Détail               | Coût       |
+| ------------ | -------------------- | ---------- |
+| Caméras      | 8 caméras IP PoE     | 1,200€     |
+| Serveur      | PC i5 + GPU          | 1,000€     |
+| Réseau       | Switch PoE, câbles   | 300€       |
+| Installation | Main d'œuvre         | 500€       |
+| Logiciel     | Développement custom | 2,000€     |
+| **TOTAL**    |                      | **5,000€** |
 
 ### Retour sur Investissement
 
 **Économies Annuelles** :
+
 1. Réduction accidents : -50% → 10,000€ économisés (soins, indemnités)
-2. Optimisation personnel : -20% agents → 15,000€ économisés
+2. Optimization personnel : -20% agents → 15,000€ économisés
 3. Meilleure expérience → +10% fréquentation → 50,000€ revenus sup.
 
 **ROI** : Rentabilisé en 3-6 mois
@@ -459,32 +482,36 @@ python train.py \
 ## 🔮 Évolution Future
 
 ### Phase 1 (Mois 1-3) : POC
+
 - ✅ Dataset 1000 images
 - ✅ Modèle entraîné
 - ✅ Test sur 1 marché (Adjamé)
 - ✅ Dashboard basique
 
 ### Phase 2 (Mois 4-6) : Déploiement
+
 - 🔄 3 marchés supplémentaires
 - 🔄 Tracking avancé
 - 🔄 Alertes automatiques
 - 🔄 Application mobile
 
 ### Phase 3 (Mois 7-12) : Scaling
+
 - 📈 Tous marchés d'Abidjan (15+)
 - 📈 Prédiction IA
 - 📈 Intégration autorités
 - 📈 API publique pour chercheurs
 
 ### Phase 4 (An 2+) : Innovation
+
 - 🚀 Reconnaissance faciale (recherche personnes)
-- 🚀 Analyse comportements suspects
-- 🚀 Optimisation flux automatique
+- 🚀 Analyze comportements suspects
+- 🚀 Optimization flux automatique
 - 🚀 Extension autres villes (Bouaké, San Pedro)
 
 ---
 
-## 📞 Partenaires Potentiels
+## 📞 Partenaires Potentials
 
 1. **Mairies** : Plateau, Adjamé, Treichville
 2. **Ministère du Commerce**
@@ -498,9 +525,10 @@ python train.py \
 
 ## 📝 Conclusion
 
-ZKA Marchés représente une **solution concrète à un problème réel** qui touche quotidiennement des centaines de milliers d'Ivoiriens. 
+ZKA Marchés représente une **solution concrète à un problème réel** qui touche quotidiennement des centaines de milliers d'Ivoiriens.
 
-**Avantages clés** :
+**Advantages clés** :
+
 - ✅ Sécurité améliorée
 - ✅ Gestion data-driven
 - ✅ Scalable
@@ -508,6 +536,7 @@ ZKA Marchés représente une **solution concrète à un problème réel** qui to
 - ✅ Impact social fort
 
 **Prochaines étapes** :
+
 1. Collecte photos marchés Abidjan
 2. Annotation 1000 images
 3. Entraînement modèle
@@ -516,6 +545,6 @@ ZKA Marchés représente une **solution concrète à un problème réel** qui to
 
 ---
 
-**Auteurs** : Projet ZKA - ESATIC 2025  
+**Auteurs** : Project ZKA - ESATIC 2025  
 **Contact** : [Votre email]  
-**Licence** : À définir avec partenaires
+**License** : À définir avec partenaires
