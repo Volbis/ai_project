@@ -1,0 +1,92 @@
+# Dataset YOLOv5 - Marchés de Côte d'Ivoire
+# Projet ZKA Marchés - Gestion des flux
+
+# Chemins du dataset
+path: ../dataset_marches_ci  # Chemin racine du dataset (relatif à yolov5/)
+train: train/images  # Images d'entraînement
+val: val/images      # Images de validation
+test: test/images    # Images de test (optionnel)
+
+# Nombre de classes
+nc: 7
+
+# Noms des classes (en français)
+names:
+  0: personne        # Piétons, clients, commerçants
+  1: vehicule        # Motos, taxis, camions de livraison
+  2: etal            # Stands de marché, boutiques
+  3: chariot         # Brouettes, chariots à bras
+  4: obstacle        # Marchandises empilées, colis bloquant passage
+  5: voie_bloquee    # Passage complètement obstrué
+  6: zone_dense      # Concentration élevée de personnes (>10 pers/m²)
+
+# Informations supplémentaires
+description: |
+  Dataset custom pour détection d'objets dans les marchés ivoiriens.
+  Ciblé sur les marchés d'Adjamé, Treichville, Cocody, Yopougon.
+  Utilisé pour gestion des flux, sécurité et prévention d'accidents.
+
+# Contexte d'utilisation
+use_cases:
+  - Comptage de personnes en temps réel
+  - Détection d'encombrement dangereux
+  - Gestion circulation véhicules
+  - Identification voies bloquées
+  - Cartographie zones critiques
+  - Prévision d'affluence
+
+# Configuration d'entraînement recommandée
+training_config:
+  img_size: 640
+  batch_size: 16
+  epochs: 100
+  model: yolov5s.pt  # Partir du modèle pré-entraîné
+  patience: 10       # Early stopping
+  
+# Augmentation de données (automatique dans train.py)
+augmentation:
+  hsv_h: 0.015      # Variation teinte (lumière différente)
+  hsv_s: 0.7        # Variation saturation
+  hsv_v: 0.4        # Variation valeur (luminosité)
+  degrees: 10       # Rotation ±10°
+  translate: 0.1    # Translation 10%
+  scale: 0.5        # Zoom 50%
+  shear: 2.0        # Cisaillement 2°
+  perspective: 0.0  # Perspective (désactivé)
+  flipud: 0.0       # Flip vertical (désactivé pour caméras fixes)
+  fliplr: 0.5       # Flip horizontal 50%
+  mosaic: 1.0       # Mosaïque (combine 4 images)
+  mixup: 0.1        # Mixup 10%
+
+# Métriques cibles (à atteindre)
+target_metrics:
+  mAP50: 0.65       # mAP @ IoU=0.5 (65% minimum)
+  mAP50-95: 0.45    # mAP @ IoU=0.5:0.95 (45% minimum)
+  precision: 0.70   # Précision 70%
+  recall: 0.70      # Rappel 70%
+  inference_time: 100  # < 100ms par image (CPU)
+
+# Exemples de sources d'images
+data_sources:
+  - Marché d'Adjamé (Abidjan)
+  - Marché de Treichville (Abidjan)
+  - Marché de Cocody (Abidjan)
+  - Marché de Yopougon (Abidjan)
+  - Conditions: Matin (6h-10h), Midi (12h-14h), Soir (17h-19h)
+  - Hauteurs caméra: 3m, 5m, 10m
+  - Angles: 45°, 60°, 90° (vue de dessus)
+
+# Notes importantes
+notes: |
+  1. Collecter au moins 1000 images variées
+  2. Annoter avec LabelImg ou Roboflow (format YOLO)
+  3. Répartition: 70% train, 20% val, 10% test
+  4. Inclure différentes conditions lumière et densité
+  5. Privilégier angles réalistes (hauteur caméra 3-5m)
+  6. Tester modèle sur vidéos réelles avant déploiement
+
+# Contact et support
+authors: "Projet ZKA - ESATIC 2025"
+contact: "votre.email@esatic.edu.ci"
+version: "1.0.0"
+last_updated: "2025-12-19"

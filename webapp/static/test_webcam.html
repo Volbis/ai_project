@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Webcam - YOLOv5</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .video-container {
+            position: relative;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        #video {
+            width: 100%;
+            display: block;
+        }
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .placeholder {
+            aspect-ratio: 16/9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            padding: 40px;
+            text-align: center;
+        }
+        .placeholder svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 150px;
+        }
+        .btn-start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-stop {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-stop:hover {
+            background: #dc2626;
+        }
+        .btn-detect {
+            background: #10b981;
+            color: white;
+        }
+        .btn-detect:hover {
+            background: #059669;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .status.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .detections {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .detections h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .detection-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #10b981;
+        }
+        .detection-class {
+            font-weight: bold;
+            color: #333;
+        }
+        .detection-conf {
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        .info-box ul {
+            list-style: none;
+            color: #1e3a8a;
+        }
+        .info-box li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Test Webcam YOLOv5</h1>
+        <p class="subtitle">Vérifiez que votre webcam et la détection fonctionnent</p>
+        
+        <div id="status" class="status info">
+            <span>ℹ️</span>
+            <span>Cliquez sur "Démarrer la webcam" pour commencer</span>
+        </div>
+
+        <div class="video-container">
+            <div id="placeholder" class="placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                <h3>Webcam en attente</h3>
+                <p>La vidéo apparaîtra ici une fois démarrée</p>
+            </div>
+            <video id="video" autoplay playsinline style="display: none;"></video>
+            <canvas id="canvas" style="display: none;"></canvas>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn" class="btn-start" onclick="startWebcam()">
+                📹 Démarrer la webcam
+            </button>
+            <button id="stopBtn" class="btn-stop" onclick="stopWebcam()" disabled>
+                ⏹️ Arrêter
+            </button>
+            <button id="detectBtn" class="btn-detect" onclick="detectObjects()" disabled>
+                🔍 Détecter les objets
+            </button>
+        </div>
+
+        <div id="detectionsDiv" class="detections" style="display: none;">
+            <h3>Détections 🎯</h3>
+            <div id="detectionsList"></div>
+        </div>
+
+        <div class="info-box">
+            <h4>💡 Instructions</h4>
+            <ul>
+                <li>Autorisez l'accès à la webcam quand le navigateur demande</li>
+                <li>Placez-vous devant la caméra ou montrez des objets</li>
+                <li>Cliquez sur "Détecter les objets" pour analyser l'image</li>
+                <li>Le serveur doit être actif sur <strong>http://localhost:8001</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let stream = null;
+        let video = document.getElementById('video');
+        let canvas = document.getElementById('canvas');
+        let placeholder = document.getElementById('placeholder');
+        let statusDiv = document.getElementById('status');
+
+        function setStatus(type, icon, message) {
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+        }
+
+        async function startWebcam() {
+            try {
+                setStatus('info', '⏳', 'Demande d\'accès à la webcam...');
+                
+                // Demande d'accès à la webcam
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    } 
+                });
+                
+                video.srcObject = stream;
+                video.style.display = 'block';
+                canvas.style.display = 'block';
+                placeholder.style.display = 'none';
+                
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+                document.getElementById('detectBtn').disabled = false;
+                
+                setStatus('success', '✅', 'Webcam activée avec succès !');
+                
+            } catch (error) {
+                console.error('Erreur webcam:', error);
+                let message = 'Erreur d\'accès à la webcam: ' + error.message;
+                
+                if (error.name === 'NotAllowedError') {
+                    message = '❌ Permission refusée. Autorisez l\'accès à la caméra dans votre navigateur.';
+                } else if (error.name === 'NotFoundError') {
+                    message = '❌ Aucune webcam trouvée. Vérifiez qu\'une caméra est connectée.';
+                } else if (error.name === 'NotReadableError') {
+                    message = '❌ La webcam est déjà utilisée par une autre application.';
+                }
+                
+                setStatus('error', '❌', message);
+            }
+        }
+
+        function stopWebcam() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            
+            video.style.display = 'none';
+            canvas.style.display = 'none';
+            placeholder.style.display = 'flex';
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('detectBtn').disabled = true;
+            document.getElementById('detectionsDiv').style.display = 'none';
+            
+            setStatus('info', 'ℹ️', 'Webcam arrêtée');
+        }
+
+        async function detectObjects() {
+            try {
+                setStatus('info', '🔄', 'Analyse en cours...');
+                document.getElementById('detectBtn').disabled = true;
+                
+                // Capturer l'image actuelle
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                
+                // Convertir en blob
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
+                
+                // Envoyer au serveur
+                const formData = new FormData();
+                formData.append('file', blob, 'webcam.jpg');
+                
+                const response = await fetch('http://localhost:8001/detect?model=yolov5s&confidence=0.25', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erreur serveur: ' + response.status);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayDetections(data.detections, data.processing_time);
+                    
+                    // Afficher l'image avec détections
+                    const img = new Image();
+                    img.onload = () => {
+                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    };
+                    img.src = 'data:image/jpeg;base64,' + data.image;
+                    
+                    const count = data.detections.length;
+                    setStatus('success', '✅', 
+                        `${count} objet${count !== 1 ? 's' : ''} détecté${count !== 1 ? 's' : ''} en ${(data.processing_time * 1000).toFixed(0)}ms`
+                    );
+                } else {
+                    throw new Error(data.error || 'Erreur inconnue');
+                }
+                
+            } catch (error) {
+                console.error('Erreur détection:', error);
+                setStatus('error', '❌', 'Erreur: ' + error.message + ' - Vérifiez que le serveur est actif sur localhost:8001');
+            } finally {
+                document.getElementById('detectBtn').disabled = false;
+            }
+        }
+
+        function displayDetections(detections, processingTime) {
+            const detectionsDiv = document.getElementById('detectionsDiv');
+            const detectionsList = document.getElementById('detectionsList');
+            
+            if (detections.length === 0) {
+                detectionsList.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">Aucun objet détecté. Essayez de montrer une personne, un objet ou un animal.</p>';
+            } else {
+                detectionsList.innerHTML = detections.map(det => `
+                    <div class="detection-item">
+                        <span class="detection-class">${det.class}</span>
+                        <span class="detection-conf">${(det.confidence * 100).toFixed(1)}%</span>
+                    </div>
+                `).join('');
+            }
+            
+            detectionsDiv.style.display = 'block';
+        }
+
+        // Vérifier le serveur au chargement
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('http://localhost:8001/api');
+                const data = await response.json();
+                console.log('Serveur connecté:', data);
+            } catch (error) {
+                setStatus('warning', '⚠️', 'Attention: Impossible de contacter le serveur sur localhost:8001. Démarrez-le d\'abord !');
+            }
+        });
+    </script>
+</body>
+</html>
