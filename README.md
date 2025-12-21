@@ -1,4 +1,4 @@
-# 🎯 ZKA Detection - Système Intelligent de Gestion des Flux
+# ZKA Detection - Système Intelligent de Gestion des Flux
 
 <div align="center">
 
@@ -15,58 +15,58 @@
 
 ---
 
-## 📋 Table des matières
+## Table des matières
 
-- [🎯 Aperçu](#-aperçu)
-- [✨ Fonctionnalités](#-fonctionnalités)
-- [🏗️ Architecture](#️-architecture)
-- [🚀 Démos en ligne](#-démos-en-ligne)
-- [📊 Performances](#-performances)
-- [💻 Installation](#-installation)
-- [👥 Contributeurs](#-contributeurs)
-- [📄 Licence](#-licence)
+- [Aperçu](#aperçu)
+- [Fonctionnalités](#fonctionnalités)
+- [Architecture](#architecture)
+- [Démos en ligne](#démos-en-ligne)
+- [Performances](#performances)
+- [Installation](#installation)
+- [Contributeurs](#contributeurs)
+- [Licence](#licence)
 
 ---
 
-## 🎯 Aperçu
+## Aperçu
 
 **ZKA Detection** est un système intelligent de détection d'objets conçu spécifiquement pour surveiller et gérer les flux de personnes et véhicules dans les marchés d'Abidjan. Basé sur YOLOv5, il offre une détection en temps réel avec une interface web moderne et intuitive.
 
-### 🎯 Objectifs
+### Objectifs
 
-- ✅ Détection d'objets en temps réel (webcam, images, vidéos)
-- ✅ Interface web responsive et moderne
-- ✅ Support multilingue (Français/Anglais)
-- ✅ Statistiques et historique des détections
-- ✅ Déploiement cloud sur Hugging Face Spaces
-- ✅ API REST complète pour intégrations tierces
+- Détection d'objets en temps réel (webcam, images, vidéos)
+- Interface web responsive et moderne
+- Support multilingue (Français/Anglais)
+- Statistiques et historique des détections
+- Déploiement cloud sur Hugging Face Spaces
+- API REST complète pour intégrations tierces
 
-### 🌍 Contexte
+### Contexte
 
-Les marchés d'Abidjan accueillent quotidiennement des dizaines de milliers de personnes, générant des défis de gestion de flux, de sécurité et de congestion. Ce projet apporte une solution technologique basée sur l'IA pour optimiser la gestion de ces espaces publics
+Les marchés d'Abidjan accueillent quotidiennement des dizaines de milliers de personnes, générant des défis de gestion de flux, de sécurité et de congestion. Ce projet apporte une solution technologique basée sur l'IA pour optimiser la gestion de ces espaces publics.
 
 ---
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
-### 🎥 Détection en Temps Réel
+### Détection en Temps Réel
 - **Webcam** : Détection via flux webcam avec overlay des résultats
 - **Upload d'images** : Analyse d'images individuelles ou par lot
 - **Vidéos** : Support des flux RTSP et fichiers vidéo
 - **Ajustable** : Seuil de confiance et sélection du modèle
 
-### 📊 Dashboard Interactif
+### Dashboard Interactif
 - **Statistiques en direct** : Comptage des objets détectés
 - **Graphiques** : Visualisation de la distribution des classes
 - **Historique** : Archive des détections avec timestamps
 - **Performances** : Monitoring FPS et temps de traitement
 
-### 🌐 API REST
+### API REST
 - **Endpoints** : `/detect`, `/statistics`, `/history`, `/models`
 - **WebSocket** : Communication bidirectionnelle pour temps réel
 - **Documentation** : Swagger UI intégré (`/docs`)
 
-### 🎨 Interface Moderne
+### Interface Moderne
 - Design responsive (mobile/desktop)
 - Multilingue (FR/EN)
 - TailwindCSS + Chart.js
@@ -74,19 +74,19 @@ Les marchés d'Abidjan accueillent quotidiennement des dizaines de milliers de p
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
-### 📐 Architecture Système
+### Architecture Système
 
 ```mermaid
 graph TB
-    subgraph "🎥 Sources"
+    subgraph "Sources"
         A1[Webcam] --> D
         A2[Images] --> D
         A3[Vidéos/RTSP] --> D
     end
     
-    subgraph "🧠 Backend - FastAPI"
+    subgraph "Backend - FastAPI"
         D[Acquisition] --> E[Prétraitement]
         E --> F[YOLOv5 Engine]
         F --> G[Post-traitement]
@@ -94,7 +94,7 @@ graph TB
         G --> I[WebSocket]
     end
     
-    subgraph "💻 Frontend"
+    subgraph "Frontend"
         H --> J[Interface Web]
         I --> J
         J --> K[Dashboard]
@@ -102,7 +102,7 @@ graph TB
         J --> M[Statistiques]
     end
     
-    subgraph "📊 Stockage"
+    subgraph "Stockage"
         G --> N[(Historique)]
         G --> O[(Statistiques)]
     end
@@ -111,7 +111,7 @@ graph TB
     style J fill:#2196F3
 ```
 
-### 🔄 Pipeline de Détection
+### Pipeline de Détection
 
 ```mermaid
 flowchart LR
@@ -122,67 +122,66 @@ flowchart LR
     E --> F[Détections<br/>Finales]
     
     style B fill:#FF9800
-   🚀 Démos en Ligne
+    style D fill:#4CAF50
+    style F fill:#2196F3
+```
 
-### 🌐 Applications Déployées
+### Classes Détectées
+
+Le modèle pré-entraîné COCO détecte **80 classes** incluant :
+
+| Catégorie | Exemples | Utilité |
+|-----------|----------|---------||
+| **Personnes** | Piétons, foules | Comptage de flux, densité |
+| **Véhicules** | Voitures, motos, bus, vélos | Gestion circulation |
+| **Objets** | Sacs, valises, parapluies | Suivi logistique |
+| **Infrastructure** | Bancs, chaises, tables | Cartographie |
+| **Marchandises** | Fruits, objets divers | Activité commerciale |
+
+---
+
+## 🚀 Démos en Ligne
+
+### Applications Déployées
 
 Testez le système directement sans installation :
 
-#### 1️⃣ **Version Complète** (Recommandé)
+#### **Version Complète** (Recommandé)
 **🔗 [https://huggingface.co/spaces/root16285/zka-detection-full](https://huggingface.co/spaces/root16285/zka-detection-full)**
 
-- ✅ Détection webcam en temps réel
-- ✅ Upload d'images
-- ✅ Dashboard statistiques
-- ✅ Historique complet
-- ✅ WebSocket temps réel
+- Détection webcam en temps réel
+- Upload d'images
+- Dashboard statistiques
+- Historique complet
+- WebSocket temps réel
 
-#### 2️⃣ **Version Simple**
+#### **Version Simple**
 **🔗 [https://huggingface.co/spaces/root16285/zka-detection](https://huggingface.co/spaces/root16285/zka-detection)**
 
-- ✅ Upload d'images
-- ✅ Interface Gradio simplifiée
-- ✅ Résultats instantanés
-- ✅ Multilingue (FR/EN)
+- Upload d'images
+- Interface Gradio simplifiée
+- Résultats instantanés
+- Multilingue (FR/EN)
 
-### 🎬 Captures d'Écran
+### Captures d'Écran
 
 ```
 ┌─────────────────────────────────────────────┐
-│  🎥 Détection Webcam Temps Réel             │
+│  Détection Webcam Temps Réel                │
 ├─────────────────────────────────────────────┤
 │                                             │
 │  [Flux vidéo avec overlays de détection]   │
 │                                             │
-│  👤 Personne: 5  🚗 Voiture: 2  🚴 Vélo: 1  │
-│  ⚡ FPS: 24  ⏱️ Latence: 42ms              │
+│  Personne: 5  Voiture: 2  Vélo: 1          │
+│  FPS: 24  Latence: 42ms                    │
 └─────────────────────────────────────────────┘
 ```
-2. Prédiction par cellule (boîtes + confiances + classes)
-3. Post-traitement (NMS + filtrage)
-
-**Formules clés** :
-```
-Confidence = Pr(Objet) × IoU(prédiction, vérité)
-IoU = Aire(intersection) / Aire(union)
-Precision = TP / (TP + FP)
-Recall = TP / (TP + FN)
-```
-
-### 4.3 Métriques d'évaluation
-
-- **mAP** (mean Average Precision) : Métrique principale
-- **Précision** : Réduction faux positifs
-- **Rappel** : Détection complète
-- **FPS** : Vitesse d'inférence
-- **F1-Score** : Harmonique précision/rappel
 
 ---
 
-## 5. Données et méthodologie
-📊 Performances
+## Performances
 
-### ⚡ Vitesse d'Inférence
+### Vitesse d'Inférence
 
 ```mermaid
 graph LR
@@ -194,7 +193,7 @@ graph LR
     style B fill:#4CAF50
 ```
 
-### 📈 Métriques Modèle (YOLOv5s - COCO)
+### Métriques Modèle (YOLOv5s - COCO)
 
 | Métrique | Valeur | Description |
 |----------|--------|-------------|
@@ -204,22 +203,23 @@ graph LR
 | **FPS (CPU)** | ~15 FPS | Intel i7 @ 640px |
 | **FPS (GPU)** | ~140 FPS | Tesla T4 @ 640px |
 
-### 🎯 Comparaison des Modèles
+### Comparaison des Modèles
 
 ```mermaid
 graph TD
     A[Choix du Modèle] --> B{Priorité?}
-    B -->|Vitesse| C[YOLOv5n/s<br/>⚡ Rapide<br/>📱 Temps réel]
-    B -->|Équilibre| D[YOLOv5m<br/>⚖️ Balancé<br/>🎯 Recommandé]
-    B -->|Précision| E[YOLOv5l/x<br/>🎓 Précis<br/>💪 Puissant]
+    B -->|Vitesse| C[YOLOv5n/s<br/>Rapide<br/>Temps réel]
+    B -->|Équilibre| D[YOLOv5m<br/>Balancé<br/>Recommandé]
+    B -->|Précision| E[YOLOv5l/x<br/>Précis<br/>Puissant]
     
     style D fill:#4CAF50
 ```
+
 ---
 
-## 6. Implémentation et mise en œuvre
+## Implémentation et mise en œuvre
 
-### 6.1 Environnement de développement
+### Environnement de développement
 
 **Stack technologique** :
 - Python 3.8.10
@@ -231,15 +231,20 @@ graph TD
 ```
 projetzkad-master/
 ├── yolov5/              # Base YOLOv5
-├──💻 Installation
+├── webapp/              # Application web
+```
 
-### 📋 Prérequis
+---
+
+## Installation
+
+### Prérequis
 
 - Python 3.8+
 - pip ou conda
 - (Optionnel) GPU NVIDIA avec CUDA 11.x
 
-### 🚀 Installation Rapide
+### Installation Rapide
 
 ```bash
 # 1. Cloner le dépôt
@@ -262,11 +267,11 @@ cd webapp/backend
 python main.py
 ```
 
-### 🌐 Accès
+### Accès
 
 Ouvrez votre navigateur sur : **http://localhost:8001**
 
-### 🐳 Docker (Alternative)
+### Docker (Alternative)
 
 ```bash
 # Build et lancement
@@ -274,7 +279,7 @@ docker build -t zka-detection .
 docker run -p 8001:8001 zka-detection
 ```
 
-### 📦 Stack Technique
+### Stack Technique
 
 ```mermaid
 graph TB
@@ -288,9 +293,26 @@ graph TB
     
     subgraph "Frontend"
         F[HTML5/CSS3]
-   🎓 Utilisation
+        G[JavaScript ES6+]
+        H[TailwindCSS 3.0]
+        I[Chart.js 4.0]
+    end
+    
+    subgraph "Infrastructure"
+        J[Uvicorn ASGI]
+        K[WebSocket]
+        L[REST API]
+    end
+    
+    style C fill:#4CAF50
+    style B fill:#009688
+```
 
-### 📸 Détection via Webcam
+---
+
+## Utilisation
+
+### Détection via Webcam
 
 ```python
 from ultralytics import YOLO
@@ -302,7 +324,7 @@ model = YOLO('yolov5s.pt')
 model.predict(source=0, show=True, conf=0.5)
 ```
 
-### 🖼️ Détection sur Image
+### Détection sur Image
 
 ```python
 # Détection image unique
@@ -315,7 +337,7 @@ results[0].show()
 results[0].save('output.jpg')
 ```
 
-### 🌐 API REST
+### API REST
 
 ```bash
 # Upload et détection
@@ -332,45 +354,32 @@ curl "http://localhost:8001/history?limit=10"
 
 ---
 
-## 👥 Contributeurs
+## Contributeurs
 
 <div align="center">
 
-### 🎓 Équipe de Développement
+### Équipe de Développement
 
-| Rôle | Contributeur | Contact |
-|------|--------------|---------|
-| 👨‍💻 **Chef de Projet** | VOLBIS | [@root16285](https://huggingface.co/root16285) |
-| 🎨 **Développeur Frontend** | Équipe ESATIC | - |
-| ⚙️ **Développeur Backend** | Équipe ESATIC | - |
-| 🧠 **ML Engineer** | Équipe ESATIC | - |
+| Nom | Contact |
+|-----|---------|
+| **Albert Coulibaly** (IA)| [@Coulibaly Nahouo Albert](https://huggingface.co/root16285) |
+| **Ziao KOLO ISRAEL** (Développeurs) | [@Ziao Kolo Irael](https://www.linkedin.com/in/kolo-israel-ziao-1711a9329/)|
+| **Konan Konan Romuald** (Développeurs) | [@KOnan Romuald](https://www.linkedin.com/in/konan-n-dri-romuald-konan-6347b4327/)|
+| **Dembélé Madoussou** (Maths) |+225 0103736385|
 
-### 🏛️ Institution
+
+### Institution
 
 **[ESATIC](https://esatic.ci)**  
 École Supérieure Africaine des TIC  
 Abidjan, Côte d'Ivoire
 
-### 🤝 Remerciements
-
-- Ultralytics pour YOLOv5
-- Hugging Face pour l'hébergement des démos
-- Communauté open-source
 
 </div>
 
 ---
 
-## 📞 Contact & Support
-
-- 🐛 **Issues** : [GitHub Issues](https://github.com/votre-org/projetzkad-master/issues)
-- 💬 **Discussions** : [GitHub Discussions](https://github.com/votre-org/projetzkad-master/discussions)
-- 📧 **Email** : support@zka-detection.ci
-- 🌐 **Website** : [zka-detection.ci](https://zka-detection.ci)
-
----
-
-## 📄 Licence
+## Licence
 
 Ce projet est sous licence **MIT** - voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
@@ -386,7 +395,7 @@ in the Software without restriction...
 
 ---
 
-## 🌟 Citation
+## Citation
 
 Si vous utilisez ce projet dans vos recherches, veuillez le citer :
 
@@ -404,7 +413,7 @@ Si vous utilisez ce projet dans vos recherches, veuillez le citer :
 
 <div align="center">
 
-**⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile !**
+**Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile !**
 
 Made with ❤️ by ESATIC Team | Abidjan, Côte d'Ivoire 🇨🇮
 
