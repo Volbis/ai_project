@@ -24,7 +24,7 @@
 - [📊 Performances](#-performances)
 - [💻 Installation](#-installation)
 - [👥 Contributeurs](#-contributeurs)
-- [📄 Licence](#-licence)
+- [📄 License](#-licence)
 
 ---
 
@@ -43,30 +43,34 @@
 
 ### 🌍 Contexte
 
-Les marchés d'Abidjan accueillent quotidiennement des dizaines de milliers de personnes, générant des défis de gestion de flux, de sécurité et de congestion. Ce projet apporte une solution technologique basée sur l'IA pour optimiser la gestion de ces espaces publics
+Les marchés d'Abidjan accueillent quotidiennement des dizaines de milliers de personnes, générant des défis de gestion de flux, de sécurité et de congestion. Ce project apporte une solution technologique basée sur l'IA pour optimizer la gestion de ces escapes publics
 
 ---
 
 ## ✨ Fonctionnalités
 
 ### 🎥 Détection en Temps Réel
+
 - **Webcam** : Détection via flux webcam avec overlay des résultats
-- **Upload d'images** : Analyse d'images individuelles ou par lot
+- **Upload d'images** : Analyze d'images individuelles ou par lot
 - **Vidéos** : Support des flux RTSP et fichiers vidéo
 - **Ajustable** : Seuil de confiance et sélection du modèle
 
 ### 📊 Dashboard Interactif
-- **Statistiques en direct** : Comptage des objets détectés
-- **Graphiques** : Visualisation de la distribution des classes
+
+- **Statistiques en direct** : Comptage des objects détectés
+- **Graphiques** : Visualization de la distribution des classes
 - **Historique** : Archive des détections avec timestamps
 - **Performances** : Monitoring FPS et temps de traitement
 
 ### 🌐 API REST
+
 - **Endpoints** : `/detect`, `/statistics`, `/history`, `/models`
 - **WebSocket** : Communication bidirectionnelle pour temps réel
 - **Documentation** : Swagger UI intégré (`/docs`)
 
 ### 🎨 Interface Moderne
+
 - Design responsive (mobile/desktop)
 - Multilingue (FR/EN)
 - TailwindCSS + Chart.js
@@ -85,7 +89,7 @@ graph TB
         A2[Images] --> D
         A3[Vidéos/RTSP] --> D
     end
-    
+
     subgraph "🧠 Backend - FastAPI"
         D[Acquisition] --> E[Prétraitement]
         E --> F[YOLOv5 Engine]
@@ -93,20 +97,20 @@ graph TB
         G --> H[API REST]
         G --> I[WebSocket]
     end
-    
+
     subgraph "💻 Frontend"
         H --> J[Interface Web]
         I --> J
         J --> K[Dashboard]
-        J --> L[Visualisation]
+        J --> L[Visualization]
         J --> M[Statistiques]
     end
-    
+
     subgraph "📊 Stockage"
         G --> N[(Historique)]
         G --> O[(Statistiques)]
     end
-    
+
     style F fill:#4CAF50
     style J fill:#2196F3
 ```
@@ -120,7 +124,7 @@ flowchart LR
     C --> D[Multi-Scale<br/>Detection]
     D --> E[NMS<br/>Filtering]
     E --> F[Détections<br/>Finales]
-    
+
     style B fill:#FF9800
    🚀 Démos en Ligne
 
@@ -134,7 +138,7 @@ Testez le système directement sans installation :
 - ✅ Détection webcam en temps réel
 - ✅ Upload d'images
 - ✅ Dashboard statistiques
-- ✅ Historique complet
+- ✅ Historique complete
 - ✅ WebSocket temps réel
 
 #### 2️⃣ **Version Simple**
@@ -148,26 +152,30 @@ Testez le système directement sans installation :
 ### 🎬 Captures d'Écran
 
 ```
+
 ┌─────────────────────────────────────────────┐
-│  🎥 Détection Webcam Temps Réel             │
+│ 🎥 Détection Webcam Temps Réel │
 ├─────────────────────────────────────────────┤
-│                                             │
-│  [Flux vidéo avec overlays de détection]   │
-│                                             │
-│  👤 Personne: 5  🚗 Voiture: 2  🚴 Vélo: 1  │
-│  ⚡ FPS: 24  ⏱️ Latence: 42ms              │
+│ │
+│ [Flux vidéo avec overlays de détection] │
+│ │
+│ 👤 Personne: 5 🚗 Voiture: 2 🚴 Vélo: 1 │
+│ ⚡ FPS: 24 ⏱️ Latence: 42ms │
 └─────────────────────────────────────────────┘
+
 ```
 2. Prédiction par cellule (boîtes + confiances + classes)
 3. Post-traitement (NMS + filtrage)
 
-**Formules clés** :
+**Formulas clés** :
 ```
-Confidence = Pr(Objet) × IoU(prédiction, vérité)
+
+Confidence = Pr(Object) × IoU(prédiction, vérité)
 IoU = Aire(intersection) / Aire(union)
 Precision = TP / (TP + FP)
 Recall = TP / (TP + FN)
-```
+
+````
 
 ### 4.3 Métriques d'évaluation
 
@@ -190,21 +198,21 @@ graph LR
     B --> C[YOLOv5m<br/>12ms]
     C --> D[YOLOv5l<br/>18ms]
     D --> E[YOLOv5x<br/>26ms]
-    
+
     style B fill:#4CAF50
-```
+````
 
 ### 📈 Métriques Modèle (YOLOv5s - COCO)
 
-| Métrique | Valeur | Description |
-|----------|--------|-------------|
-| **mAP@0.5** | 56.8% | Précision moyenne (IoU≥0.5) |
-| **mAP@0.5:0.95** | 37.4% | Précision moyenne (IoU 0.5 à 0.95) |
-| **Paramètres** | 7.2M | Taille du modèle |
-| **FPS (CPU)** | ~15 FPS | Intel i7 @ 640px |
-| **FPS (GPU)** | ~140 FPS | Tesla T4 @ 640px |
+| Métrique         | Valeur   | Description                        |
+| ---------------- | -------- | ---------------------------------- |
+| **mAP@0.5**      | 56.8%    | Précision moyenne (IoU≥0.5)        |
+| **mAP@0.5:0.95** | 37.4%    | Précision moyenne (IoU 0.5 à 0.95) |
+| **Paramètres**   | 7.2M     | Taille du modèle                   |
+| **FPS (CPU)**    | ~15 FPS  | Intel i7 @ 640px                   |
+| **FPS (GPU)**    | ~140 FPS | Tesla T4 @ 640px                   |
 
-### 🎯 Comparaison des Modèles
+### 🎯 Comparison des Modèles
 
 ```mermaid
 graph TD
@@ -212,23 +220,26 @@ graph TD
     B -->|Vitesse| C[YOLOv5n/s<br/>⚡ Rapide<br/>📱 Temps réel]
     B -->|Équilibre| D[YOLOv5m<br/>⚖️ Balancé<br/>🎯 Recommandé]
     B -->|Précision| E[YOLOv5l/x<br/>🎓 Précis<br/>💪 Puissant]
-    
+
     style D fill:#4CAF50
 ```
+
 ---
 
 ## 6. Implémentation et mise en œuvre
 
-### 6.1 Environnement de développement
+### 6.1 Environment de développement
 
 **Stack technologique** :
+
 - Python 3.8.10
 - PyTorch 1.12.1
 - FastAPI 0.104.1
 - OpenCV 4.8.1
 
-**Structure du projet** :
-```
+**Structure du project** :
+
+````
 projetzkad-master/
 ├── yolov5/              # Base YOLOv5
 ├──💻 Installation
@@ -246,9 +257,9 @@ projetzkad-master/
 git clone https://github.com/votre-org/projetzkad-master.git
 cd projetzkad-master
 
-# 2. Créer un environnement virtuel
+# 2. Créer un environment virtuel
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
+source venv/bin/activate # Linux/Mac
 # venv\Scripts\activate   # Windows
 
 # 3. Installer les dépendances
@@ -260,7 +271,7 @@ wget https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5s.pt
 # 5. Lancer l'application
 cd webapp/backend
 python main.py
-```
+````
 
 ### 🌐 Accès
 
@@ -276,7 +287,7 @@ docker run -p 8001:8001 zka-detection
 
 ### 📦 Stack Technique
 
-```mermaid
+````mermaid
 graph TB
     subgraph "Backend"
         A[Python 3.8+]
@@ -285,10 +296,10 @@ graph TB
         D[PyTorch 2.0+]
         E[OpenCV 4.8]
     end
-    
+
     subgraph "Frontend"
         F[HTML5/CSS3]
-   🎓 Utilisation
+   🎓 Utilization
 
 ### 📸 Détection via Webcam
 
@@ -296,23 +307,23 @@ graph TB
 from ultralytics import YOLO
 
 # Charger le modèle
-model = YOLO('yolov5s.pt')
+model = YOLO("yolov5s.pt")
 
 # Détection webcam
 model.predict(source=0, show=True, conf=0.5)
-```
+````
 
 ### 🖼️ Détection sur Image
 
 ```python
 # Détection image unique
-results = model('path/to/image.jpg')
+results = model("path/to/image.jpg")
 
 # Afficher les résultats
 results[0].show()
 
 # Sauvegarder
-results[0].save('output.jpg')
+results[0].save("output.jpg")
 ```
 
 ### 🌐 API REST
@@ -338,12 +349,12 @@ curl "http://localhost:8001/history?limit=10"
 
 ### 🎓 Équipe de Développement
 
-| Rôle | Contributeur | Contact |
-|------|--------------|---------|
-| 👨‍💻 **Chef de Projet** | VOLBIS | [@root16285](https://huggingface.co/root16285) |
-| 🎨 **Développeur Frontend** | Équipe ESATIC | - |
-| ⚙️ **Développeur Backend** | Équipe ESATIC | - |
-| 🧠 **ML Engineer** | Équipe ESATIC | - |
+| Rôle                        | Contributeur  | Contact                                        |
+| --------------------------- | ------------- | ---------------------------------------------- |
+| 👨‍💻 **Chef de Project**       | VOLBIS        | [@root16285](https://huggingface.co/root16285) |
+| 🎨 **Développeur Frontend** | Équipe ESATIC | -                                              |
+| ⚙️ **Développeur Backend**  | Équipe ESATIC | -                                              |
+| 🧠 **ML Engineer**          | Équipe ESATIC | -                                              |
 
 ### 🏛️ Institution
 
@@ -370,9 +381,9 @@ Abidjan, Côte d'Ivoire
 
 ---
 
-## 📄 Licence
+## 📄 License
 
-Ce projet est sous licence **MIT** - voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce project est sous license **MIT** - voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ```
 MIT License
@@ -388,7 +399,7 @@ in the Software without restriction...
 
 ## 🌟 Citation
 
-Si vous utilisez ce projet dans vos recherches, veuillez le citer :
+Si vous utilisez ce project dans vos recherches, veuillez le citer :
 
 ```bibtex
 @software{zka_detection_2025,
@@ -404,7 +415,7 @@ Si vous utilisez ce projet dans vos recherches, veuillez le citer :
 
 <div align="center">
 
-**⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile !**
+**⭐ Si ce project vous a été utile, n'hésitez pas à lui donner une étoile !**
 
 Made with ❤️ by ESATIC Team | Abidjan, Côte d'Ivoire 🇨🇮
 
@@ -412,5 +423,5 @@ Made with ❤️ by ESATIC Team | Abidjan, Côte d'Ivoire 🇨🇮
 
 </div>
 
-*Document rédigé dans le cadre du projet de fin d'études à l'ESATIC*  
-*Abidjan, Décembre 2025*
+_Document rédigé dans le cadre du project de fin d'études à l'ESATIC_  
+_Abidjan, Décembre 2025_
