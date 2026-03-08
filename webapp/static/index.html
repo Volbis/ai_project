@@ -1,291 +1,345 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ZKA - Détection d'Objets par IA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3b82f6',
-                        secondary: '#8b5cf6',
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3b82f6",
+              secondary: "#8b5cf6",
+            },
+          },
+        },
+      };
     </script>
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .detection-box {
+        animation: fadeIn 0.3s ease-in;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
         }
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        to {
+          opacity: 1;
+          transform: scale(1);
         }
-        .detection-box {
-            animation: fadeIn 0.3s ease-in;
+      }
+      .pulse-dot {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        50% {
+          opacity: 0.5;
         }
-        .pulse-dot {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
+      }
     </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
     <!-- Header -->
     <header class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="gradient-bg p-2 rounded-lg">
-                        <i class="fas fa-brain text-white text-2xl"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">ZKA Vision AI</h1>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Détection d'objets intelligente en temps réel</p>
-                    </div>
-                </div>
-                
-                <div class="flex items-center space-x-4">
-                    <button id="themeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                        <i class="fas fa-moon text-gray-700 dark:text-yellow-400"></i>
-                    </button>
-                    <div class="flex items-center space-x-2 bg-green-100 dark:bg-green-900 px-3 py-2 rounded-lg">
-                        <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
-                        <span class="text-sm font-medium text-green-700 dark:text-green-300">En ligne</span>
-                    </div>
-                </div>
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="gradient-bg p-2 rounded-lg">
+              <i class="fas fa-brain text-white text-2xl"></i>
             </div>
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800 dark:text-white">ZKA Vision AI</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Détection d'objets intelligente en temps réel</p>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <button
+              id="themeToggle"
+              class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              <i class="fas fa-moon text-gray-700 dark:text-yellow-400"></i>
+            </button>
+            <div class="flex items-center space-x-2 bg-green-100 dark:bg-green-900 px-3 py-2 rounded-lg">
+              <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+              <span class="text-sm font-medium text-green-700 dark:text-green-300">En ligne</span>
+            </div>
+          </div>
         </div>
+      </div>
     </header>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        <!-- Tab Navigation -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-6 overflow-hidden">
-            <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700">
-                <button class="tab-btn active px-6 py-4 font-medium transition-colors" data-tab="webcam">
-                    <i class="fas fa-video mr-2"></i>Webcam en Direct
-                </button>
-                <button class="tab-btn px-6 py-4 font-medium transition-colors" data-tab="upload">
-                    <i class="fas fa-upload mr-2"></i>Upload Images
-                </button>
-                <button class="tab-btn px-6 py-4 font-medium transition-colors" data-tab="dashboard">
-                    <i class="fas fa-chart-bar mr-2"></i>Dashboard
-                </button>
-                <button class="tab-btn px-6 py-4 font-medium transition-colors" data-tab="history">
-                    <i class="fas fa-history mr-2"></i>Historique
-                </button>
+      <!-- Tab Navigation -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-6 overflow-hidden">
+        <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700">
+          <button class="tab-btn active px-6 py-4 font-medium transition-colors" data-tab="webcam">
+            <i class="fas fa-video mr-2"></i>Webcam en Direct
+          </button>
+          <button class="tab-btn px-6 py-4 font-medium transition-colors" data-tab="upload">
+            <i class="fas fa-upload mr-2"></i>Upload Images
+          </button>
+          <button class="tab-btn px-6 py-4 font-medium transition-colors" data-tab="dashboard">
+            <i class="fas fa-chart-bar mr-2"></i>Dashboard
+          </button>
+          <button class="tab-btn px-6 py-4 font-medium transition-colors" data-tab="history">
+            <i class="fas fa-history mr-2"></i>Historique
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Content -->
+      <div id="content-area">
+        <!-- Webcam Tab -->
+        <div id="webcam-tab" class="tab-content active">
+          <div class="grid lg:grid-cols-3 gap-6">
+            <!-- Video Feed -->
+            <div class="lg:col-span-2">
+              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <h2 class="text-xl font-bold text-gray-800 dark:text-white">Flux Vidéo en Temps Réel</h2>
+                  <div class="flex space-x-2">
+                    <button
+                      id="startWebcam"
+                      class="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all flex items-center"
+                    >
+                      <i class="fas fa-play mr-2"></i>Démarrer
+                    </button>
+                    <button
+                      id="stopWebcam"
+                      class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all hidden flex items-center"
+                    >
+                      <i class="fas fa-stop mr-2"></i>Arrêter
+                    </button>
+                  </div>
+                </div>
+
+                <div class="relative bg-gray-900 rounded-lg overflow-hidden" style="aspect-ratio: 16/9">
+                  <video id="webcam" class="w-full h-full object-cover hidden" autoplay playsinline></video>
+                  <canvas id="webcamCanvas" class="w-full h-full object-cover hidden"></canvas>
+                  <div
+                    id="webcamPlaceholder"
+                    class="absolute inset-0 flex flex-col items-center justify-center text-gray-400"
+                  >
+                    <i class="fas fa-video text-6xl mb-4 opacity-50"></i>
+                    <p class="text-lg font-medium">Cliquez sur "Démarrer" pour activer la webcam</p>
+                    <p class="text-sm mt-2 opacity-75">Le modèle YOLOv5 détectera les objects en temps réel</p>
+                  </div>
+                  <div
+                    id="webcamStats"
+                    class="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-3 py-2 rounded-lg text-sm hidden"
+                  >
+                    <div>FPS: <span id="fps">0</span></div>
+                    <div>Latence: <span id="latency">0</span>ms</div>
+                  </div>
+                </div>
+
+                <!-- Model Settings -->
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Modèle</label>
+                    <select
+                      id="modelSelect"
+                      class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-white"
+                    >
+                      <option value="yolov5s">YOLOv5s (Rapide)</option>
+                      <option value="yolov5m">YOLOv5m (Équilibré)</option>
+                      <option value="yolov5l">YOLOv5l (Précis)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                      >Confiance: <span id="confValue">0.35</span></label
+                    >
+                    <input
+                      type="range"
+                      id="confThreshold"
+                      min="0.1"
+                      max="0.9"
+                      step="0.05"
+                      value="0.35"
+                      class="w-full"
+                    />
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Plus élevé = moins de faux positifs</p>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <!-- Real-time Detections -->
+            <div class="lg:col-span-1">
+              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Détections en Direct</h3>
+                <div id="liveDetections" class="space-y-2 max-h-96 overflow-y-auto">
+                  <p class="text-gray-500 dark:text-gray-400 text-center py-8">Aucune détection</p>
+                </div>
+              </div>
+
+              <!-- Quick Stats -->
+              <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg p-6 mt-6 text-white">
+                <h3 class="text-lg font-bold mb-4">Statistiques Rapides</h3>
+                <div class="space-y-3">
+                  <div class="flex justify-between">
+                    <span>Objects détectés:</span>
+                    <span id="quickObjectCount" class="font-bold">0</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>Confiance moy:</span>
+                    <span id="quickAvgConf" class="font-bold">0%</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>Temps de traitement:</span>
+                    <span id="quickProcessTime" class="font-bold">0ms</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Tab Content -->
-        <div id="content-area">
-            <!-- Webcam Tab -->
-            <div id="webcam-tab" class="tab-content active">
-                <div class="grid lg:grid-cols-3 gap-6">
-                    <!-- Video Feed -->
-                    <div class="lg:col-span-2">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                                <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white">Flux Vidéo en Temps Réel</h2>
-                                <div class="flex space-x-2">
-                                    <button id="startWebcam" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all flex items-center">
-                                        <i class="fas fa-play mr-2"></i>Démarrer
-                                    </button>
-                                    <button id="stopWebcam" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all hidden flex items-center">
-                                        <i class="fas fa-stop mr-2"></i>Arrêter
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="relative bg-gray-900 rounded-lg overflow-hidden" style="aspect-ratio: 16/9;">
-                                <video id="webcam" class="w-full h-full object-cover hidden" autoplay playsinline></video>
-                                <canvas id="webcamCanvas" class="w-full h-full object-cover hidden"></canvas>
-                                <div id="webcamPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                                    <i class="fas fa-video text-6xl mb-4 opacity-50"></i>
-                                    <p class="text-lg font-medium">Cliquez sur "Démarrer" pour activer la webcam</p>
-                                    <p class="text-sm mt-2 opacity-75">Le modèle YOLOv5 détectera les objets en temps réel</p>
-                                </div>
-                                <div id="webcamStats" class="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-3 py-2 rounded-lg text-sm hidden">
-                                    <div>FPS: <span id="fps">0</span></div>
-                                    <div>Latence: <span id="latency">0</span>ms</div>
-                                </div>
-                            </div>
+        <!-- Upload Tab -->
+        <div id="upload-tab" class="tab-content hidden">
+          <div class="grid lg:grid-cols-2 gap-6">
+            <!-- Upload Area -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Upload d'Images</h2>
 
-                            <!-- Model Settings -->
-                            <div class="mt-4 grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Modèle</label>
-                                    <select id="modelSelect" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-white">
-                                        <option value="yolov5s">YOLOv5s (Rapide)</option>
-                                        <option value="yolov5m">YOLOv5m (Équilibré)</option>
-                                        <option value="yolov5l">YOLOv5l (Précis)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confiance: <span id="confValue">0.35</span></label>
-                                    <input type="range" id="confThreshold" min="0.1" max="0.9" step="0.05" value="0.35" class="w-full">
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Plus élevé = moins de faux positifs</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              <div
+                id="dropZone"
+                class="border-4 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-12 text-center cursor-pointer hover:border-blue-500 transition-colors"
+              >
+                <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
+                <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Glissez vos images ici</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">ou cliquez pour sélectionner</p>
+                <input type="file" id="fileInput" multiple accept="image/*" class="hidden" />
+                <button
+                  onclick="document.getElementById('fileInput').click()"
+                  class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-all"
+                >
+                  Choisir des fichiers
+                </button>
+              </div>
 
-                    <!-- Real-time Detections -->
-                    <div class="lg:col-span-1">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Détections en Direct</h3>
-                            <div id="liveDetections" class="space-y-2 max-h-96 overflow-y-auto">
-                                <p class="text-gray-500 dark:text-gray-400 text-center py-8">Aucune détection</p>
-                            </div>
-                        </div>
+              <div id="uploadPreview" class="mt-6 grid grid-cols-2 gap-4 hidden"></div>
 
-                        <!-- Quick Stats -->
-                        <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg p-6 mt-6 text-white">
-                            <h3 class="text-lg font-bold mb-4">Statistiques Rapides</h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between">
-                                    <span>Objets détectés:</span>
-                                    <span id="quickObjectCount" class="font-bold">0</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Confiance moy:</span>
-                                    <span id="quickAvgConf" class="font-bold">0%</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Temps de traitement:</span>
-                                    <span id="quickProcessTime" class="font-bold">0ms</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <button
+                id="processUpload"
+                class="w-full mt-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all font-medium hidden"
+              >
+                <i class="fas fa-magic mr-2"></i>Analyzer les images
+              </button>
             </div>
 
-            <!-- Upload Tab -->
-            <div id="upload-tab" class="tab-content hidden">
-                <div class="grid lg:grid-cols-2 gap-6">
-                    <!-- Upload Area -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                        <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Upload d'Images</h2>
-                        
-                        <div id="dropZone" class="border-4 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-12 text-center cursor-pointer hover:border-blue-500 transition-colors">
-                            <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
-                            <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Glissez vos images ici</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">ou cliquez pour sélectionner</p>
-                            <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
-                            <button onclick="document.getElementById('fileInput').click()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-all">
-                                Choisir des fichiers
-                            </button>
-                        </div>
-
-                        <div id="uploadPreview" class="mt-6 grid grid-cols-2 gap-4 hidden"></div>
-                        
-                        <button id="processUpload" class="w-full mt-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all font-medium hidden">
-                            <i class="fas fa-magic mr-2"></i>Analyser les images
-                        </button>
-                    </div>
-
-                    <!-- Results -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                        <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Résultats</h2>
-                        <div id="uploadResults" class="space-y-4">
-                            <p class="text-gray-500 dark:text-gray-400 text-center py-8">Uploadez des images pour voir les résultats</p>
-                        </div>
-                    </div>
-                </div>
+            <!-- Results -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Résultats</h2>
+              <div id="uploadResults" class="space-y-4">
+                <p class="text-gray-500 dark:text-gray-400 text-center py-8">
+                  Uploadez des images pour voir les résultats
+                </p>
+              </div>
             </div>
-
-            <!-- Dashboard Tab -->
-            <div id="dashboard-tab" class="tab-content hidden">
-                <div class="grid lg:grid-cols-3 gap-6 mb-6">
-                    <!-- Stat Cards -->
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-blue-100 text-sm">Total Détections</p>
-                                <p id="totalDetections" class="text-3xl font-bold mt-2">0</p>
-                            </div>
-                            <i class="fas fa-eye text-4xl text-blue-200"></i>
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-green-100 text-sm">Images Traitées</p>
-                                <p id="totalImages" class="text-3xl font-bold mt-2">0</p>
-                            </div>
-                            <i class="fas fa-images text-4xl text-green-200"></i>
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-purple-100 text-sm">FPS Moyen</p>
-                                <p id="avgFps" class="text-3xl font-bold mt-2">0</p>
-                            </div>
-                            <i class="fas fa-tachometer-alt text-4xl text-purple-200"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-6">
-                    <!-- Chart -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Objets Détectés</h3>
-                        <canvas id="objectsChart"></canvas>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Performance</h3>
-                        <canvas id="performanceChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- History Tab -->
-            <div id="history-tab" class="tab-content hidden">
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-800 dark:text-white">Historique des Détections</h2>
-                        <button id="clearHistory" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all">
-                            <i class="fas fa-trash mr-2"></i>Effacer
-                        </button>
-                    </div>
-                    <div id="historyList" class="space-y-4">
-                        <p class="text-gray-500 dark:text-gray-400 text-center py-8">Aucun historique</p>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" class="tab-content hidden">
+          <div class="grid lg:grid-cols-3 gap-6 mb-6">
+            <!-- Stat Cards -->
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-blue-100 text-sm">Total Détections</p>
+                  <p id="totalDetections" class="text-3xl font-bold mt-2">0</p>
+                </div>
+                <i class="fas fa-eye text-4xl text-blue-200"></i>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-green-100 text-sm">Images Traitées</p>
+                  <p id="totalImages" class="text-3xl font-bold mt-2">0</p>
+                </div>
+                <i class="fas fa-images text-4xl text-green-200"></i>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-purple-100 text-sm">FPS Moyen</p>
+                  <p id="avgFps" class="text-3xl font-bold mt-2">0</p>
+                </div>
+                <i class="fas fa-tachometer-alt text-4xl text-purple-200"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-6">
+            <!-- Chart -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+              <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Objects Détectés</h3>
+              <canvas id="objectsChart"></canvas>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+              <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Performance</h3>
+              <canvas id="performanceChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="history-tab" class="tab-content hidden">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white">Historique des Détections</h2>
+              <button
+                id="clearHistory"
+                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
+              >
+                <i class="fas fa-trash mr-2"></i>Effacer
+              </button>
+            </div>
+            <div id="historyList" class="space-y-4">
+              <p class="text-gray-500 dark:text-gray-400 text-center py-8">Aucun historique</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- Footer -->
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12">
-        <div class="container mx-auto px-4 py-6 text-center">
-            <p class="text-gray-600 dark:text-gray-400">
-                Powered by <span class="font-bold text-blue-500">YOLOv5</span> & <span class="font-bold text-purple-500">FastAPI</span>
-            </p>
-        </div>
+      <div class="container mx-auto px-4 py-6 text-center">
+        <p class="text-gray-600 dark:text-gray-400">
+          Powered by <span class="font-bold text-blue-500">YOLOv5</span> &
+          <span class="font-bold text-purple-500">FastAPI</span>
+        </p>
+      </div>
     </footer>
 
     <script src="/static/app.js"></script>
-</body>
+  </body>
 </html>
