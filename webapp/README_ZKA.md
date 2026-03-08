@@ -7,7 +7,7 @@
 ### ✨ Caractéristiques Principales
 
 - 🎥 **Détection en temps réel** via webcam
-- 📸 **Upload d'images** pour analyse batch
+- 📸 **Upload d'images** pour analyze batch
 - 🇫🇷 **Interface 100% en français** avec noms d'objets traduits
 - 📊 **Tableau de bord** avec statistiques détaillées
 - 🔍 **80 classes d'objets** détectables
@@ -16,6 +16,7 @@
 ## 🚀 Démarrage Rapide
 
 ### Windows
+
 ```powershell
 cd webapp\backend
 python main.py
@@ -23,77 +24,91 @@ python main.py
 
 Ouvrez ensuite : **http://localhost:8001**
 
-## 🎯 Objets Détectables (en français)
+## 🎯 Objects Détectables (en français)
 
 ### 👥 Personnes & Animaux
+
 - personne, chat, chien, cheval, mouton, vache, éléphant, ours, zèbre, girafe, oiseau
 
 ### 🚗 Véhicules
+
 - voiture, camion, bus, moto, vélo, avion, train, bateau
 
-### 🏠 Objets du Quotidien
+### 🏠 Objects du Quotidien
+
 - ordinateur portable, clavier, souris, téléphone portable, télévision
-- chaise, canapé, table à manger, lit
+- chaise, canapé, table à manager, lit
 - bouteille, tasse, bol, fourchette, couteau, cuillère
 
 ### 🍕 Nourriture
+
 - pomme, banane, orange, pizza, sandwich, hot-dog, gâteau, donut
 
 ### 📚 Autres
+
 - livre, horloge, vase, ciseaux, ours en peluche, parapluie, sac à dos, valise
 
 ## ⚙️ Configuration
 
 ### Seuil de Confiance
+
 - **Par défaut** : 0.35 (35%)
 - **Recommandé** : 0.30-0.40 pour usage général
 - **Précision élevée** : 0.50+ (moins de détections mais plus fiables)
 - **Sensibilité élevée** : 0.20-0.25 (plus de détections, risque de faux positifs)
 
 ### Vitesse de Détection
+
 - **Webcam** : 2 FPS (une frame toutes les 500ms)
 - **Traitement** : ~1 seconde par image
-- **Optimisé pour** : Utilisation CPU
+- **Optimisé pour** : Utilization CPU
 
 ## 🎨 Interface
 
 ### 📹 Webcam en Direct
-Détection en temps réel avec affichage des objets détectés
+
+Détection en temps réel avec affichage des objects détectés
 
 ### 📤 Upload d'Images
+
 Analysez plusieurs images simultanément
 
 ### 📊 Tableau de Bord
+
 - Nombre total de détections
 - Images traitées
 - Performance moyenne
-- Graphiques des objets détectés
+- Graphiques des objects détectés
 
 ### 📜 Historique
+
 Consultez toutes les détections passées
 
 ## 🔧 Conseils d'Utilisation
 
 ### Pour de Meilleures Détections
 
-1. **Éclairage** : Utilisez un bon éclairage naturel ou artificiel
+1. **Éclairage** : Utilisez un bon éclairage naturel ou artificial
 2. **Distance** : Placez-vous à 1-2 mètres de la caméra
-3. **Cadrage** : Montrez les objets entiers dans le cadre
-4. **Netteté** : Évitez les mouvements brusques (caméra ou objets)
+3. **Cadrage** : Montrez les objects entiers dans le cadre
+4. **Netteté** : Évitez les movements brusques (caméra ou objects)
 
 ### Résolution des Problèmes
 
-**Aucun objet détecté :**
+**Aucun object détecté :**
+
 - Baissez le seuil de confiance (0.25-0.30)
 - Améliorez l'éclairage
 - Rapprochez-vous ou éloignez-vous
 
 **Trop de fausses détections :**
+
 - Augmentez le seuil de confiance (0.40-0.50)
 - Améliorez la qualité de l'image
 
 **Performances lentes :**
-- L'utilisation CPU est normale
+
+- L'utilisation CPU est normal
 - Fermez les applications lourdes
 - Réduisez la résolution de la webcam si possible
 
@@ -134,13 +149,14 @@ numpy>=1.24.0
 - Dataset COCO (80 classes)
 - Traduction française des classes
 
-## 📄 Licence
+## 📄 License
 
-Ce projet utilise YOLOv5 sous licence AGPL-3.0
+Ce project utilize YOLOv5 sous license AGPL-3.0
 
 ## 🤝 Support
 
 Pour toute question ou problème :
+
 1. Consultez le fichier TROUBLESHOOTING.md
 2. Vérifiez que le serveur est actif
 3. Testez avec l'onglet "Upload Images" d'abord
