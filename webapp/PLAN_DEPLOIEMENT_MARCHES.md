@@ -6,7 +6,7 @@ Transformer ZKA d'une application générique de détection d'objets en une solu
 
 ---
 
-## 📦 Livrables du Projet
+## 📦 Livrables du Project
 
 ### 1. Documentation ✅
 
@@ -28,8 +28,8 @@ Transformer ZKA d'une application générique de détection d'objets en une solu
 MODEL_PATH = YOLOV5_ROOT / "yolov5s.pt"
 
 CLASS_NAMES_FR = {
-    'person': 'personne',
-    'car': 'voiture',
+    "person": "personne",
+    "car": "voiture",
     # ... 80 classes COCO
 }
 
@@ -39,63 +39,73 @@ CLASS_NAMES_FR = {
 MODEL_PATH = YOLOV5_ROOT / "webapp" / "models" / "marches_ci_best.pt"
 
 CLASS_NAMES_MARCHES = {
-    'personne': 'personne',
-    'vehicule': 'véhicule', 
-    'etal': 'étal',
-    'chariot': 'chariot',
-    'obstacle': 'obstacle',
-    'voie_bloquee': 'voie bloquée ⚠️',
-    'zone_dense': 'zone dense 🚨'
+    "personne": "personne",
+    "vehicle": "véhicule",
+    "etal": "étal",
+    "chariot": "chariot",
+    "obstacle": "obstacle",
+    "voie_bloquee": "voie bloquée ⚠️",
+    "zone_dense": "zone dense 🚨",
 }
+
 
 # Calcul densité (nouveau)
 def calculate_density(detections, image_area_m2=50):
-    """Calcule la densité de personnes par m²"""
-    person_count = sum(1 for d in detections if d['class'] == 'personne')
+    """Calcule la densité de personnes par m²."""
+    person_count = sum(1 for d in detections if d["class"] == "personne")
     density = person_count / image_area_m2
     return density
 
+
 # Alertes automatiques (nouveau)
 def check_alerts(detections, density):
-    """Génère alertes selon détections"""
+    """Génère alertes selon détections."""
     alerts = []
-    
+
     # Alerte densité critique
     if density > 10:
-        alerts.append({
-            'level': 'critical',
-            'type': 'densite',
-            'message': f'Densité critique: {density:.1f} pers/m²',
-            'action': 'Évacuation partielle recommandée'
-        })
+        alerts.append(
+            {
+                "level": "critical",
+                "type": "densite",
+                "message": f"Densité critique: {density:.1f} pers/m²",
+                "action": "Évacuation partielle recommandée",
+            }
+        )
     elif density > 5:
-        alerts.append({
-            'level': 'warning',
-            'type': 'densite',
-            'message': f'Densité élevée: {density:.1f} pers/m²',
-            'action': 'Surveillance accrue'
-        })
-    
+        alerts.append(
+            {
+                "level": "warning",
+                "type": "densite",
+                "message": f"Densité élevée: {density:.1f} pers/m²",
+                "action": "Surveillance accrue",
+            }
+        )
+
     # Alerte voie bloquée
-    blocked = [d for d in detections if d['class'] == 'voie_bloquee']
+    blocked = [d for d in detections if d["class"] == "voie_bloquee"]
     if blocked:
-        alerts.append({
-            'level': 'warning',
-            'type': 'circulation',
-            'message': f'{len(blocked)} voie(s) bloquée(s)',
-            'action': 'Dégager les passages'
-        })
-    
+        alerts.append(
+            {
+                "level": "warning",
+                "type": "circulation",
+                "message": f"{len(blocked)} voie(s) bloquée(s)",
+                "action": "Dégager les passages",
+            }
+        )
+
     # Alerte zone dense
-    dense_zones = [d for d in detections if d['class'] == 'zone_dense']
+    dense_zones = [d for d in detections if d["class"] == "zone_dense"]
     if dense_zones:
-        alerts.append({
-            'level': 'warning',
-            'type': 'concentration',
-            'message': f'{len(dense_zones)} zone(s) de concentration',
-            'action': 'Réguler les flux'
-        })
-    
+        alerts.append(
+            {
+                "level": "warning",
+                "type": "concentration",
+                "message": f"{len(dense_zones)} zone(s) de concentration",
+                "action": "Réguler les flux",
+            }
+        )
+
     return alerts
 ```
 
@@ -106,57 +116,58 @@ def check_alerts(detections, density):
 ```html
 <!-- Nouveau : Compteurs Spécialisés -->
 <div class="grid grid-cols-4 gap-4 mb-6">
-    <div class="bg-blue-500 text-white p-4 rounded">
-        <div class="text-3xl font-bold" id="count-personnes">0</div>
-        <div class="text-sm">👥 Personnes</div>
-    </div>
-    <div class="bg-green-500 text-white p-4 rounded">
-        <div class="text-3xl font-bold" id="count-vehicules">0</div>
-        <div class="text-sm">🏍️ Véhicules</div>
-    </div>
-    <div class="bg-yellow-500 text-white p-4 rounded">
-        <div class="text-3xl font-bold" id="densite">0</div>
-        <div class="text-sm">📊 Densité (pers/m²)</div>
-    </div>
-    <div class="bg-red-500 text-white p-4 rounded">
-        <div class="text-3xl font-bold" id="count-alertes">0</div>
-        <div class="text-sm">🚨 Alertes</div>
-    </div>
+  <div class="bg-blue-500 text-white p-4 rounded">
+    <div class="text-3xl font-bold" id="count-personnes">0</div>
+    <div class="text-sm">👥 Personnes</div>
+  </div>
+  <div class="bg-green-500 text-white p-4 rounded">
+    <div class="text-3xl font-bold" id="count-vehicules">0</div>
+    <div class="text-sm">🏍️ Véhicules</div>
+  </div>
+  <div class="bg-yellow-500 text-white p-4 rounded">
+    <div class="text-3xl font-bold" id="densite">0</div>
+    <div class="text-sm">📊 Densité (pers/m²)</div>
+  </div>
+  <div class="bg-red-500 text-white p-4 rounded">
+    <div class="text-3xl font-bold" id="count-alertes">0</div>
+    <div class="text-sm">🚨 Alertes</div>
+  </div>
 </div>
 
 <!-- Nouveau : Section Alertes -->
 <div id="alertes-container" class="mb-6">
-    <!-- Alertes dynamiques ici -->
+  <!-- Alertes dynamiques ici -->
 </div>
 
 <!-- Nouveau : Carte des Zones -->
 <div class="bg-white rounded-lg shadow p-4 mb-6">
-    <h3 class="text-lg font-bold mb-4">📍 Carte du Marché</h3>
-    <div id="market-map" class="h-64 bg-gray-100 rounded">
-        <!-- Visualisation carte marché -->
-    </div>
+  <h3 class="text-lg font-bold mb-4">📍 Carte du Marché</h3>
+  <div id="market-map" class="h-64 bg-gray-100 rounded">
+    <!-- Visualization carte marché -->
+  </div>
 </div>
 ```
 
 #### Frontend JavaScript (webapp/static/app.js)
 
-**Nouvelles fonctions** :
+**Nouvelles functions** :
 
 ```javascript
 // Afficher alertes
 function displayAlerts(alerts) {
-    const container = document.getElementById('alertes-container');
-    
-    if (alerts.length === 0) {
-        container.innerHTML = '';
-        return;
-    }
-    
-    const alertHTML = alerts.map(alert => {
-        const bgColor = alert.level === 'critical' ? 'bg-red-100 border-red-500' : 'bg-yellow-100 border-yellow-500';
-        const icon = alert.level === 'critical' ? '🚨' : '⚠️';
-        
-        return `
+  const container = document.getElementById("alertes-container");
+
+  if (alerts.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const alertHTML = alerts
+    .map((alert) => {
+      const bgColor = alert.level === "critical" ? "bg-red-100 border-red-500" : "bg-yellow-100 border-yellow-500";
+      const icon = alert.level === "critical" ? "🚨" : "⚠️";
+
+      return `
             <div class="${bgColor} border-l-4 p-4 mb-2">
                 <div class="flex items-center">
                     <span class="text-2xl mr-3">${icon}</span>
@@ -167,26 +178,27 @@ function displayAlerts(alerts) {
                 </div>
             </div>
         `;
-    }).join('');
-    
-    container.innerHTML = alertHTML;
+    })
+    .join("");
+
+  container.innerHTML = alertHTML;
 }
 
 // Mettre à jour compteurs
 function updateCounters(detections, density, alerts) {
-    const personnes = detections.filter(d => d.class === 'personne').length;
-    const vehicules = detections.filter(d => d.class === 'vehicule').length;
-    
-    document.getElementById('count-personnes').textContent = personnes;
-    document.getElementById('count-vehicules').textContent = vehicules;
-    document.getElementById('densite').textContent = density.toFixed(1);
-    document.getElementById('count-alertes').textContent = alerts.length;
+  const personnes = detections.filter((d) => d.class === "personne").length;
+  const vehicles = detections.filter((d) => d.class === "vehicle").length;
+
+  document.getElementById("count-personnes").textContent = personnes;
+  document.getElementById("count-vehicles").textContent = vehicles;
+  document.getElementById("densite").textContent = density.toFixed(1);
+  document.getElementById("count-alertes").textContent = alerts.length;
 }
 
-// Visualiser carte marché
+// Visualizer carte marché
 function updateMarketMap(detections) {
-    // TODO: Implémenter visualisation carte
-    // Peut utiliser Canvas ou bibliothèque comme Konva.js
+  // TODO: Implémenter visualization carte
+  // Peut utiliser Canvas ou bibliothèque comme Konva.js
 }
 ```
 
@@ -224,7 +236,7 @@ function updateMarketMap(detections) {
 │  • chariot ×8                                           │
 │                                                          │
 │  📍 CARTE DU MARCHÉ                                     │
-│  [Visualisation zones + densités]                      │
+│  [Visualization zones + densités]                      │
 │                                                          │
 └──────────────────────────────────────────────────────────┘
 ```
@@ -249,12 +261,10 @@ function updateMarketMap(detections) {
   - Marché d'Adjamé : 400 images
   - Marché de Treichville : 300 images
   - Autres marchés : 300 images
-  
 - [ ] Jour 4-7 : Annotation avec LabelImg
   - 150-200 images/jour
   - Vérification qualité annotations
-  
-- [ ] Jour 8-10 : Organisation dataset
+- [ ] Jour 8-10 : Organization dataset
   - Split 70/20/10
   - Vérification avec scripts Python
   - Backup sur cloud
@@ -263,19 +273,16 @@ function updateMarketMap(detections) {
 
 **Objectif** : Modèle avec mAP > 65%
 
-- [ ] Jour 1 : Setup environnement
+- [ ] Jour 1 : Setup environment
   - Installer dépendances
   - Vérifier GPU (ou Google Colab)
-  
 - [ ] Jour 2-4 : Premier entraînement
   - 100 epochs
-  - Analyser résultats
+  - Analyzer résultats
   - Identifier faiblesses
-  
-- [ ] Jour 5-6 : Optimisation
+- [ ] Jour 5-6 : Optimization
   - Corriger annotations problématiques
   - Réentraîner avec hyperparamètres ajustés
-  
 - [ ] Jour 7 : Validation
   - Tests sur vidéos réelles
   - Mesurer performances (FPS, précision)
@@ -288,17 +295,14 @@ function updateMarketMap(detections) {
   - Adapter main.py pour 7 classes
   - Implémenter calcul densité
   - Implémenter système d'alertes
-  
 - [ ] Jour 3-4 : Frontend
   - Nouveau design dashboard
   - Compteurs spécialisés
   - Section alertes
-  
 - [ ] Jour 5-6 : Tests
   - Tests unitaires
   - Tests d'intégration
   - Tests de charge
-  
 - [ ] Jour 7 : Documentation
   - Guide utilisateur
   - Guide installation
@@ -312,13 +316,11 @@ function updateMarketMap(detections) {
   - Caméra(s) au marché pilote
   - Configuration serveur
   - Formation personnel
-  
 - [ ] Semaine 6-7 : Collecte données
   - Monitoring 24/7
   - Collecte feedback
   - Ajustements
-  
-- [ ] Semaine 8 : Analyse
+- [ ] Semaine 8 : Analyze
   - Rapport statistiques
   - ROI estimé
   - Plan d'extension
@@ -336,33 +338,33 @@ function updateMarketMap(detections) {
 
 ## 💰 Budget Estimatif
 
-### Projet Pilote (1 Marché)
+### Project Pilote (1 Marché)
 
-| Poste | Quantité | Prix Unitaire | Total |
-|-------|----------|---------------|-------|
-| **Matériel** | | | |
-| Caméras IP PoE 1080p | 4 | 150€ | 600€ |
-| PC Serveur (i5, 16GB, SSD) | 1 | 600€ | 600€ |
-| Switch PoE 8 ports | 1 | 100€ | 100€ |
-| Câbles réseau | 50m | 1€/m | 50€ |
-| Protection (boîtiers étanches) | 4 | 30€ | 120€ |
-| **Installation** | | | |
-| Main d'œuvre | 3 jours | 100€/j | 300€ |
-| Support/fixations | | | 100€ |
-| **Logiciel** | | | |
-| Développement custom | 20h | 50€/h | 1000€ |
-| **Formation** | | | |
-| Personnel marché | 1 jour | 200€ | 200€ |
-| **Divers** | | | |
-| Imprévus (10%) | | | 300€ |
-| **TOTAL** | | | **3,370€** |
+| Poste                          | Quantité | Prix Unitaire | Total      |
+| ------------------------------ | -------- | ------------- | ---------- |
+| **Matériel**                   |          |               |            |
+| Caméras IP PoE 1080p           | 4        | 150€          | 600€       |
+| PC Serveur (i5, 16GB, SSD)     | 1        | 600€          | 600€       |
+| Switch PoE 8 ports             | 1        | 100€          | 100€       |
+| Câbles réseau                  | 50m      | 1€/m          | 50€        |
+| Protection (boîtiers étanches) | 4        | 30€           | 120€       |
+| **Installation**               |          |               |            |
+| Main d'œuvre                   | 3 jours  | 100€/j        | 300€       |
+| Support/fixations              |          |               | 100€       |
+| **Logiciel**                   |          |               |            |
+| Développement custom           | 20h      | 50€/h         | 1000€      |
+| **Formation**                  |          |               |            |
+| Personnel marché               | 1 jour   | 200€          | 200€       |
+| **Divers**                     |          |               |            |
+| Imprévus (10%)                 |          |               | 300€       |
+| **TOTAL**                      |          |               | **3,370€** |
 
 ### Scaling (5 Marchés)
 
 - Coût/marché réduit : ~2,500€ (économie d'échelle)
 - Total 5 marchés : **12,500€**
 - Budget marketing : 2,000€
-- **TOTAL PROJET** : **~15,000€**
+- **TOTAL PROJECT** : **~15,000€**
 
 ---
 
@@ -432,7 +434,7 @@ function updateMarketMap(detections) {
 3. **Publication Scientifique** (Mois 6)
    - Article conférence (CARI, AFRICON)
    - Blog technique
-   - Tutoriel open source
+   - Tutorial open source
 
 ### Médias
 
@@ -452,16 +454,19 @@ function updateMarketMap(detections) {
 ### Proposition de Valeur
 
 **Pour les Autorités** :
+
 - Réduction accidents et incidents
 - Données pour décisions éclairées
 - Image moderne et innovante
 
 **Pour les Commerçants** :
+
 - Meilleure sécurité
 - Moins de congestion
 - Plus de clients (expérience améliorée)
 
 **Pour les Usagers** :
+
 - Navigation facilitée
 - Temps réduit
 - Expérience agréable
@@ -507,29 +512,33 @@ function updateMarketMap(detections) {
 ## 🎯 Vision Long Terme
 
 ### An 1 : Abidjan (15 marchés)
+
 - Déploiement progressif
 - Collecte données massives
 - Amélioration continue
 
 ### An 2 : Côte d'Ivoire (50+ marchés)
+
 - Extension Bouaké, Yamoussoukro, San Pedro
 - Gares routières
-- Centres commerciaux
+- Centers commerciaux
 
 ### An 3 : Afrique de l'Ouest
+
 - Dakar, Bamako, Lomé, Cotonou
 - Partenariats CEDEAO
 - Solution SaaS
 
 ### An 5 : Impact Panafricain
+
 - 1000+ sites équipés
 - 10M+ personnes impactées
 - Standard de référence
 
 ---
 
-**Le futur des marchés africains commence ici. 🚀🇨🇮**
+**Le futur des marchés africans commence ici. 🚀🇨🇮**
 
 ---
 
-*Document créé le 19 décembre 2025 - Projet ZKA Marchés - ESATIC*
+_Document créé le 19 décembre 2025 - Project ZKA Marchés - ESATIC_

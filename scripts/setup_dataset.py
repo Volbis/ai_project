@@ -1,24 +1,24 @@
 """
 Script d'initialisation rapide du dataset
 Crée la structure de dossiers nécessaire
-Pour le projet ZKA Marchés CI
+Pour le project ZKA Marchés CI.
 """
 
-from pathlib import Path
 import argparse
+from pathlib import Path
+
 
 def setup_dataset(dataset_root):
-    """
-    Crée la structure de dossiers pour le dataset
-    
+    """Crée la structure de dossiers pour le dataset.
+
     Args:
         dataset_root: Chemin racine du dataset
     """
-    print("🚀 Initialisation du dataset ZKA Marchés CI...")
+    print("🚀 Initialization du dataset ZKA Marchés CI...")
     print("=" * 60)
-    
+
     dataset_root = Path(dataset_root)
-    
+
     # Structure complète
     folders = [
         "images",
@@ -30,13 +30,13 @@ def setup_dataset(dataset_root):
         "test/images",
         "test/labels",
     ]
-    
+
     print("\n📁 Création de la structure de dossiers:")
     for folder in folders:
         folder_path = dataset_root / folder
         folder_path.mkdir(parents=True, exist_ok=True)
         print(f"   ✅ {folder}/")
-    
+
     # Créer fichier README
     readme_path = dataset_root / "README.md"
     if not readme_path.exists():
@@ -62,7 +62,7 @@ dataset_marches_ci/
 ## 🎯 Classes (7)
 
 0. **personne** - Piétons, clients, commerçants
-1. **vehicule** - Motos, taxis, camions
+1. **vehicle** - Motos, taxis, camions
 2. **etal** - Stands de marché
 3. **chariot** - Brouettes, chariots à bras
 4. **obstacle** - Marchandises bloquant passage
@@ -104,7 +104,7 @@ python scripts/check_dataset.py
 # Répartir train/val/test
 python scripts/split_dataset.py
 
-# Visualiser annotations
+# Visualizer annotations
 python scripts/visualize_annotations.py
 ```
 
@@ -117,12 +117,12 @@ python scripts/visualize_annotations.py
 
 ---
 
-**Projet ZKA Marchés CI - ESATIC 2025**
+**Project ZKA Marchés CI - ESATIC 2025**
 """
-        with open(readme_path, 'w', encoding='utf-8') as f:
+        with open(readme_path, "w", encoding="utf-8") as f:
             f.write(readme_content)
-        print(f"\n📄 Créé: README.md")
-    
+        print("\n📄 Créé: README.md")
+
     # Créer fichier .gitignore
     gitignore_path = dataset_root / ".gitignore"
     if not gitignore_path.exists():
@@ -141,55 +141,56 @@ python scripts/visualize_annotations.py
 .DS_Store
 Thumbs.db
 """
-        with open(gitignore_path, 'w', encoding='utf-8') as f:
+        with open(gitignore_path, "w", encoding="utf-8") as f:
             f.write(gitignore_content)
-        print(f"📄 Créé: .gitignore")
-    
+        print("📄 Créé: .gitignore")
+
     # Instructions finales
     print("\n" + "=" * 60)
     print("✅ Structure du dataset créée avec succès!")
     print(f"\n📂 Dossier: {dataset_root.absolute()}")
-    
+
     print("\n📝 PROCHAINES ÉTAPES:")
     print("\n1️⃣  Collecter des photos:")
     print("   - Visiter les marchés d'Abidjan")
     print("   - Prendre 1000+ photos (différentes heures, angles)")
     print("   - Placer dans: dataset_marches_ci/images/")
-    
+
     print("\n2️⃣  Annoter avec LabelImg:")
     print("   - Installer: pip install labelImg")
     print("   - Lancer: labelImg")
     print("   - Format: YOLO")
     print("   - Sauvegarder labels dans: dataset_marches_ci/labels/")
-    
+
     print("\n3️⃣  Répartir le dataset:")
     print("   - Commande: python scripts/split_dataset.py")
     print("   - Résultat: train/ val/ test/ remplis automatiquement")
-    
+
     print("\n4️⃣  Vérifier:")
     print("   - Commande: python scripts/check_dataset.py")
-    print("   - Visualiser: python scripts/visualize_annotations.py")
-    
+    print("   - Visualizer: python scripts/visualize_annotations.py")
+
     print("\n5️⃣  Entraîner YOLOv5:")
     print("   - Voir: GUIDE_ENTRAINEMENT.md")
     print("   - Commande: python train.py --data data/marches_ci.yaml ...")
-    
+
     print("\n💡 Documentation complète:")
     print("   - GUIDE_ANNOTATION_IMAGES.md")
     print("   - GUIDE_ENTRAINEMENT.md")
     print("   - CAS_USAGE_MARCHES_CI.md")
-    
+
     print("\n" + "=" * 60)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Initialiser la structure du dataset")
     parser.add_argument(
         "dataset_root",
         type=str,
-        nargs='?',
+        nargs="?",
         default="../dataset_marches_ci",
-        help="Chemin racine du dataset (défaut: ../dataset_marches_ci)"
+        help="Chemin racine du dataset (défaut: ../dataset_marches_ci)",
     )
-    
+
     args = parser.parse_args()
     setup_dataset(args.dataset_root)
