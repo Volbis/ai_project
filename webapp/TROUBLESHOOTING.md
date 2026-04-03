@@ -11,23 +11,28 @@ Le serveur est maintenant actif sur **http://localhost:8001**
 ### Vérifications Importantes :
 
 #### 1. **Permissions du Navigateur** ⚠️
+
 - Lorsque vous cliquez sur "Démarrer", le navigateur doit demander l'autorisation d'accès à la webcam
 - **Vérifiez** : Cliquez sur l'icône de cadenas 🔒 dans la barre d'adresse
 - **Autorisez** : Caméra et Microphone pour `localhost`
 
 #### 2. **Navigateur Moderne Requis** 🌐
+
 - ✅ **Recommandé** : Chrome, Edge, Firefox récent
 - ❌ **Non supporté** : Internet Explorer
 - L'API WebRTC doit être disponible
 
 #### 3. **HTTPS vs HTTP** 🔐
+
 - Sur `localhost` : HTTP fonctionne
 - Sur réseau distant : HTTPS obligatoire pour webcam
 
 #### 4. **Simple Browser de VS Code** 💡
+
 Le Simple Browser de VS Code peut avoir des limitations avec la webcam.
 
 **Solution** : Ouvrez dans un navigateur externe :
+
 ```
 http://localhost:8001
 ```
@@ -37,12 +42,14 @@ http://localhost:8001
 ## 🔍 Tests à Effectuer
 
 ### Test 1 : Upload d'Image
+
 1. Allez dans l'onglet **"Upload Images"**
 2. Glissez une photo (personne, voiture, animal)
-3. Cliquez sur **"Analyser les images"**
+3. Cliquez sur **"Analyzer les images"**
 4. ✅ Si cela fonctionne → Le backend marche !
 
 ### Test 2 : Console du Navigateur
+
 1. Appuyez sur **F12** pour ouvrir DevTools
 2. Allez dans l'onglet **"Console"**
 3. Cliquez sur **"Démarrer"** la webcam
@@ -69,6 +76,7 @@ http://localhost:8001
 ## 🔧 Solutions Rapides
 
 ### Solution 1 : Ouvrir dans Chrome/Edge
+
 ```powershell
 # Ouvrir directement dans Chrome
 start chrome http://localhost:8001
@@ -78,10 +86,12 @@ start msedge http://localhost:8001
 ```
 
 ### Solution 2 : Vérifier les Permissions Windows
+
 1. **Windows 11** : Paramètres → Confidentialité et sécurité → Caméra
 2. Vérifier que "Autoriser les applications à accéder à votre caméra" est activé
 
 ### Solution 3 : Tester avec une Image d'abord
+
 - Commencez par l'onglet **"Upload Images"**
 - Testez avec une photo de personne ou d'objet
 - Cela confirme que YOLOv5 fonctionne
@@ -91,7 +101,9 @@ start msedge http://localhost:8001
 ## 📊 Vérifier l'État du Serveur
 
 ### Dans le Terminal
+
 Le serveur doit afficher :
+
 ```
 ✅ Modules YOLOv5 importés avec succès
 ✅ Modèle yolov5s chargé avec succès!
@@ -99,11 +111,15 @@ INFO:     Uvicorn running on http://0.0.0.0:8001
 ```
 
 ### Tester l'API
+
 Ouvrez dans un navigateur :
+
 ```
 http://localhost:8001/api
 ```
+
 Vous devez voir :
+
 ```json
 {
   "message": "YOLOv5 Detection API",
@@ -114,43 +130,52 @@ Vous devez voir :
 
 ---
 
-## 🎯 Objets Détectables
+## 🎯 Objects Détectables
 
 YOLOv5 détecte **80 classes d'objets** dont :
 
 ### Personnes & Animaux 👥🐕
+
 - person, cat, dog, horse, sheep, cow, bird, etc.
 
 ### Véhicules 🚗
+
 - car, truck, bus, motorcycle, bicycle, airplane, train
 
-### Objets du Quotidien 📱
+### Objects du Quotidien 📱
+
 - laptop, keyboard, mouse, phone, bottle, cup, chair, etc.
 
 ### Sport ⚽
+
 - ball, tennis racket, skateboard, etc.
 
 **Note** : YOLOv5 ne détecte pas :
+
 - ❌ Texte ou chiffres
 - ❌ Émotions ou sentiments
-- ❌ Objets abstraits
+- ❌ Objects abstraits
 
 ---
 
 ## 🐛 Debugging Avancé
 
 ### Voir les logs en temps réel
+
 Le terminal affiche les détections :
+
 ```
-✅ Détection terminée: 3 objets trouvés en 0.145s
+✅ Détection terminée: 3 objects trouvés en 0.145s
 ```
 
 ### Tester le WebSocket manuellement
+
 Dans la console du navigateur (F12) :
+
 ```javascript
-const ws = new WebSocket('ws://localhost:8001/ws');
-ws.onopen = () => console.log('Connecté!');
-ws.onerror = (e) => console.error('Erreur:', e);
+const ws = new WebSocket("ws://localhost:8001/ws");
+ws.onopen = () => console.log("Connecté!");
+ws.onerror = (e) => console.error("Erreur:", e);
 ```
 
 ---
@@ -171,8 +196,9 @@ ws.onerror = (e) => console.error('Erreur:', e);
 ## ✨ Tout Fonctionne !
 
 Si vous voyez :
+
 - ✅ Flux vidéo de la webcam
-- ✅ Boîtes vertes autour des objets détectés
+- ✅ Boîtes vertes autour des objects détectés
 - ✅ Liste des détections à droite qui se met à jour
 - ✅ FPS et latence affichés
 
@@ -183,6 +209,7 @@ Si vous voyez :
 ## 🚀 Commandes Utiles
 
 ### Redémarrer le serveur
+
 ```powershell
 # Arrêter : Ctrl+C dans le terminal
 # Redémarrer :
@@ -191,7 +218,9 @@ python main.py
 ```
 
 ### Changer le port
+
 Modifier dans `main.py` ligne 478 :
+
 ```python
 uvicorn.run(app, host="0.0.0.0", port=8001)  # Changer 8001
 ```

@@ -37,17 +37,20 @@ python scripts/setup_dataset.py
 **Où ?** Marchés d'Abidjan (Adjamé, Treichville, Cocody, Yopougon)
 
 **Quand ?**
+
 - 🌅 Matin: 6h-10h (affluence forte)
 - 🌞 Midi: 12h-14h (moyenne)
 - 🌆 Soir: 17h-19h (pic)
 
 **Comment ?**
+
 - Hauteur: 2-5 mètres (vue d'ensemble)
 - Angle: 45-90° (légèrement plongée)
 - Distance: 5-20 mètres des sujets
 - **Minimum: 1000 photos | Recommandé: 3000+ photos**
 
 **Conseils:**
+
 ```
 ✅ Variété scènes (calme, dense, circulation)
 ✅ Différents angles et distances
@@ -68,6 +71,7 @@ labelImg
 ```
 
 **Configuration:**
+
 1. Open Dir → `dataset_marches_ci/images/`
 2. Change Save Dir → `dataset_marches_ci/labels/`
 3. **Format: YOLO** (important!)
@@ -75,17 +79,18 @@ labelImg
 
 **Les 7 Classes:**
 
-| ID | Classe | Quand l'utiliser | Priorité |
-|----|--------|------------------|----------|
-| 0 | **personne** | Tout piéton, client, commerçant | ⭐⭐⭐ |
-| 1 | **vehicule** | Moto, taxi, camion, vélo | ⭐⭐⭐ |
-| 2 | **etal** | Stand de marché, boutique | ⭐⭐ |
-| 3 | **chariot** | Brouette, chariot à bras | ⭐⭐ |
-| 4 | **obstacle** | Marchandise bloquant passage | ⭐ |
-| 5 | **voie_bloquee** | Zone de passage obstruée | ⭐⭐⭐ |
-| 6 | **zone_dense** | Concentration >10 pers/m² | ⭐⭐ |
+| ID  | Classe           | Quand l'utiliser                | Priorité |
+| --- | ---------------- | ------------------------------- | -------- |
+| 0   | **personne**     | Tout piéton, client, commerçant | ⭐⭐⭐   |
+| 1   | **vehicle**     | Moto, taxi, camion, vélo        | ⭐⭐⭐   |
+| 2   | **etal**         | Stand de marché, boutique       | ⭐⭐     |
+| 3   | **chariot**      | Brouette, chariot à bras        | ⭐⭐     |
+| 4   | **obstacle**     | Marchandise bloquant passage    | ⭐       |
+| 5   | **voie_bloquee** | Zone de passage obstruée        | ⭐⭐⭐   |
+| 6   | **zone_dense**   | Concentration >10 pers/m²       | ⭐⭐     |
 
 **Raccourcis LabelImg:**
+
 - `W` : Créer boîte
 - `D` : Image suivante
 - `A` : Image précédente
@@ -105,11 +110,12 @@ python scripts/split_dataset.py
 ```
 
 **Vérifier:**
+
 ```bash
 # Statistiques détaillées
 python scripts/check_dataset.py
 
-# Visualiser annotations
+# Visualizer annotations
 python scripts/visualize_annotations.py
 ```
 
@@ -182,12 +188,14 @@ uploaded = files.upload()  # Sélectionner dataset_marches_ci.zip
 ### 📊 Résultats Attendus
 
 **Métriques Cibles:**
+
 - mAP@0.5: **> 65%**
 - mAP@0.5:0.95: **> 45%**
 - Precision: **> 70%**
 - Recall: **> 70%**
 
 **Fichiers Générés:**
+
 ```
 runs/train/marches_ci_v1/
 ├── weights/
@@ -239,50 +247,45 @@ copy runs\train\marches_ci_v1\weights\best.pt webapp\backend\marches_ci_best.pt
 ```python
 # Ajouter les 7 classes en français
 CLASS_NAMES_FR = {
-    'personne': 'personne',
-    'vehicule': 'véhicule',
-    'etal': 'étal',
-    'chariot': 'chariot',
-    'obstacle': 'obstacle',
-    'voie_bloquee': 'voie bloquée',
-    'zone_dense': 'zone dense'
+    "personne": "personne",
+    "vehicle": "véhicule",
+    "etal": "étal",
+    "chariot": "chariot",
+    "obstacle": "obstacle",
+    "voie_bloquee": "voie bloquée",
+    "zone_dense": "zone dense",
 }
 
 # Charger le modèle personnalisé
-model = load_model('marches_ci_best.pt')
+model = load_model("marches_ci_best.pt")
 ```
 
 ### 3. Ajouter Comptage
 
 ```python
 def calculate_density(detections, image_area):
-    """Calculer densité personnes/m²"""
-    persons = [d for d in detections if d['class'] == 'personne']
+    """Calculer densité personnes/m²."""
+    persons = [d for d in detections if d["class"] == "personne"]
     # Estimer 1 pixel = 0.01 m² (à calibrer)
     area_m2 = image_area * 0.01
     density = len(persons) / area_m2
     return density
 
+
 def check_alerts(detections):
-    """Générer alertes"""
+    """Générer alertes."""
     alerts = []
-    
+
     # Voie bloquée
-    blocked = [d for d in detections if d['class'] == 'voie_bloquee']
+    blocked = [d for d in detections if d["class"] == "voie_bloquee"]
     if len(blocked) > 0:
-        alerts.append({
-            'level': 'critical',
-            'message': f'⚠️ {len(blocked)} voie(s) bloquée(s) détectée(s)'
-        })
-    
+        alerts.append({"level": "critical", "message": f"⚠️ {len(blocked)} voie(s) bloquée(s) détectée(s)"})
+
     # Zone dense
-    dense_zones = [d for d in detections if d['class'] == 'zone_dense']
+    dense_zones = [d for d in detections if d["class"] == "zone_dense"]
     if len(dense_zones) > 0:
-        alerts.append({
-            'level': 'warning',
-            'message': f'⚠️ {len(dense_zones)} zone(s) de forte densité'
-        })
-    
+        alerts.append({"level": "warning", "message": f"⚠️ {len(dense_zones)} zone(s) de forte densité"})
+
     return alerts
 ```
 
@@ -301,7 +304,7 @@ Ouvrir: http://localhost:8001
 - 🏷️ [GUIDE_ANNOTATION_IMAGES.md](GUIDE_ANNOTATION_IMAGES.md) - Guide d'annotation détaillé
 - 🏋️ [GUIDE_ENTRAINEMENT.md](GUIDE_ENTRAINEMENT.md) - Guide d'entraînement approfondi
 - 🚀 [PLAN_DEPLOIEMENT_MARCHES.md](webapp/PLAN_DEPLOIEMENT_MARCHES.md) - Stratégie de déploiement
-- 📖 [README_ZKA_MARCHES.md](README_ZKA_MARCHES.md) - Vue d'ensemble du projet
+- 📖 [README_ZKA_MARCHES.md](README_ZKA_MARCHES.md) - Vue d'ensemble du project
 
 ## 🛠️ Scripts Utiles
 
@@ -309,7 +312,7 @@ Ouvrir: http://localhost:8001
 # Vérifier dataset
 python scripts/check_dataset.py
 
-# Visualiser annotations
+# Visualizer annotations
 python scripts/visualize_annotations.py --split train
 
 # Statistiques entraînement
@@ -321,23 +324,27 @@ python val.py \
 ## ❓ Problèmes Fréquents
 
 ### "ModuleNotFoundError: No module named 'torch'"
+
 ```bash
 pip install torch torchvision
 ```
 
 ### "CUDA out of memory"
+
 ```bash
 # Réduire batch size
 python train.py --batch 4 ...
 ```
 
 ### "mAP très faible (<40%)"
+
 - ✅ Vérifier qualité annotations (boîtes précises ?)
 - ✅ Augmenter nombre images (min 1000)
 - ✅ Augmenter epochs (150-200)
 - ✅ Essayer modèle plus gros (yolov5m.pt)
 
 ### "Images sans label"
+
 ```bash
 # Lister images sans label
 python scripts/check_dataset.py
@@ -348,7 +355,7 @@ python scripts/check_dataset.py
 
 - **Documentation:** Voir dossier `docs/`
 - **Issues YOLOv5:** https://github.com/ultralytics/yolov5/issues
-- **Contact:** Projet ZKA - ESATIC
+- **Contact:** Project ZKA - ESATIC
 
 ---
 
@@ -370,6 +377,7 @@ python scripts/check_dataset.py
 - [ ] Prêt pour déploiement pilote! 🚀
 
 **Temps Total Estimé:** 2-4 semaines
+
 - Semaine 1-2: Collecte + Annotation (1000+ images)
 - Semaine 3: Entraînement + Tests
 - Semaine 4: Intégration + Déploiement
